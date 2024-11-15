@@ -1,0 +1,63 @@
+.pio_version 0
+
+.program gb_link_ext
+.wrap_target
+    set y, 0
+    set x, 0
+    pull noblock
+    set y, 7
+bitloop:
+    ; yes, i know the delays seem superfluous, but it breaks otherwise
+    ;
+    wait 0 pin 1 [31]  ; wait for low (first cycle doesnt matter)
+    nop          [31]
+    out pins, 1  [31]  ; shift out output bit
+    wait 1 pin 1 [31]
+    nop          [31]
+    in pins, 1   [31]  ; shift in a bit
+    jmp y-- bitloop
+    push noblock
+.wrap
+
+% c-sdk {
+static inline void gb_link_ext_program_init(
+    PIO pio, 
+    uint sm,
+    uint offset,
+    uint si,
+    uint sc,
+    uint so
+) {
+
+    assert(sc == si+1);
+
+    pio_sm_config c = gb_link_ext_program_get_default_config(offset);
+
+    sm_config_set_in_pins(&c, si);
+    pio_sm_set_consecutive_pindirs(pio, sm, si, 2, false);
+    
+    pio_gpio_init(pio, si);
+    pio_gpio_init(pio, sc);
+
+    sm_config_set_out_pins(&c, so, 1);
+    pio_sm_set_consecutive_pindirs(pio, sm, so, 1, true);
+    pio_gpio_init(pio, so);
+
+    sm_config_set_in_shift(
+        &c,
+        false,
+        false,
+        8
+    );
+
+    sm_config_set_out_shift(
+        &c,
+        false,
+        false,
+        8
+    );
+
+    pio_sm_init(pio, sm, offset, &c);
+    pio_sm_set_enabled(pio, sm, true);
+}
+%}
