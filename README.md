@@ -32,7 +32,7 @@ You can find more detailed information on the individual components in the follo
 
 ```
 /pico/ | Firmware + PIO programs for an RP2040/RPi Pico (W)
-/rom/  | Gameboy Color ROMs
+/roms/ | Gameboy Color ROMs
 /py/   | Python package + scripts for streaming data to the gameboy color 
 /pcb/  | Schematics, PCB designs, and gerber files for the GBLink board.
 ```

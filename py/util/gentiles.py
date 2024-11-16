@@ -1,11 +1,10 @@
-import argparse
 import math
 import numpy as np
 
 from py.util import permutations
 
 
-def get_color_index(rgb, ncolors):
+def get_color_index(rgb, ncolors: int):
     return int(round((sum(rgb)/(ncolors - 1))/255 * (ncolors - 1)))
 
 

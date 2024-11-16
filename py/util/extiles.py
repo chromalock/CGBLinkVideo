@@ -1,10 +1,7 @@
 # Converts an image into a tilemap and tiles
 
 import py.video.util as util
-import os
-import cv2
-
-from py.util import bits_to_byte, clamp, tile_to_2bpp, tile_to_image
+from py.util import clamp, tile_to_2bpp, tile_to_image
 
 
 def extract_tiles(path: str, tile_n: int):
@@ -30,9 +27,7 @@ def extract_tiles(path: str, tile_n: int):
         tile_y = y//tile_size
 
         if y % tile_size or x % tile_size:
-            print(
-                f"error: image dimensions are not integer multiples of tile factor: {tile_size =} {x =} {y =}")
-            exit(1)
+            raise f"error: image dimensions are not integer multiples of tile factor: {tile_size =} {x =} {y =}"
 
         tile_map = [[0 for _ in range(0, tile_x)] for _ in range(0, tile_y)]
 

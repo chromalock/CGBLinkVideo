@@ -2,7 +2,7 @@ ASM	= rgbasm
 LINK = rgblink
 FIX = rgbfix
 
-BINS	= serial-test.gbc
+BINS	= low-speed.gbc
 
 all:	$(BINS)
 

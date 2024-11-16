@@ -8,7 +8,7 @@ SECTION	"start",ROM0[$0100]
  DB $00,$08,$11,$1F,$88,$89,$00,$0E,$DC,$CC,$6E,$E6,$DD,$DD,$D9,$99
  DB $BB,$BB,$67,$63,$6E,$0E,$EC,$CC,$DD,$DC,$99,$9F,$BB,$B9,$33,$3E
 
- DB "BADAPPLE",0,0,0,0,0,0,0  ; Cart name - 15bytes
+ DB "LINKTEST",0,0,0,0,0,0,0  ; Cart name - 15bytes
  DB $C0                       ; $143 - CGB support (supports both)
  DB 0,0                       ; $144 - Licensee code
  DB 0                         ; $146 - SGB Support indicator
@@ -22,23 +22,18 @@ SECTION	"start",ROM0[$0100]
  DW 0                         ; $14e - Checksum
 
 
-INCLUDE "../shared/util.asm"
+INCLUDE "../../shared/util.asm"
 
 begin:
   ; no interrupts needed
 	di
 
 	; Enter Double-speed mode
-	; ld a, 1
-	; ld [$ff4d], a
-	; stop
+	ld a, 1
+	ld [$ff4d], a
+	stop
 
 	LCDOFF
-
-	; setup serial (internal, high speed)
-	ld a, $1
-	ld [$ff02], a
-
 
 ; turn lcd on and start serial data loop
 	LCDON
@@ -46,12 +41,12 @@ begin:
 loop:
 	; send byte
 	ld a, b
-	TransferByteInternalFast
+	TransferByteInternalSlow
 	inc b
 	; just a delay
 REPT 60
-	WaitForMode %00000001
-	WaitForMode %00000011	
+	WaitVBlank
+	WaitVBlankEnd	
 ENDR
 	jp	loop
 

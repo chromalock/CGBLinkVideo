@@ -2,13 +2,9 @@ ASM	= rgbasm
 LINK = rgblink
 FIX = rgbfix
 
-BINS	= lo-res.gbc
+BINS	= high-speed.gbc
 
 all:	$(BINS)
-
-compile.bat: Makefile
-	@echo "REM Automatically generated from Makefile" > compile.bat
-	@make -sn | sed y/\\//\\\\/ | grep -v make >> compile.bat
 
 # Compile and link single file in one pass
 %.gbc:	%.asm

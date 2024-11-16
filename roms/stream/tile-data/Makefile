@@ -2,9 +2,13 @@ ASM	= rgbasm
 LINK = rgblink
 FIX = rgbfix
 
-BINS	= bad-apple.gbc
+BINS	= tile-index.gbc
 
 all:	$(BINS)
+
+compile.bat: Makefile
+	@echo "REM Automatically generated from Makefile" > compile.bat
+	@make -sn | sed y/\\//\\\\/ | grep -v make >> compile.bat
 
 # Compile and link single file in one pass
 %.gbc:	%.asm

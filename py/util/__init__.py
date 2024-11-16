@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import copy
 
-from py.util import bits_to_byte, clamp
+from py.util import bits_to_byte
 
 
 def chunks(lst: list, n: int):
@@ -24,10 +24,10 @@ def permutations(color_depth: int, length: int):
     return outputs
 
 
-def square(x: int, y: int, w: int, h: int):
-    for xi in range(0, w):
-        for yi in range(0, h):
-            yield (x + xi, y + yi)
+def square(start_x: int, start_y: int, width: int, height: int):
+    for xi in range(0, width):
+        for yi in range(0, height):
+            yield (start_x + xi, start_y + yi)
 
 
 def clamp(f: float, s: int) -> int:
@@ -38,6 +38,7 @@ def bits_to_byte(s: list[int]) -> int:
     return int("".join([str(x) for x in s]), 2)
 
 
+# TODO need to add in palette selection
 def tile_to_2bpp(tile_image):
     grey = cv2.cvtColor(np.uint8(tile_image), cv2.COLOR_RGB2GRAY)//85
     lo = np.bitwise_and(1, np.copy(grey))
