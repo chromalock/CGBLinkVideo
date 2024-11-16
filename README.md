@@ -14,7 +14,7 @@ Playing media on a gameboy color over the link cable, with the help of an [RP204
 - GBLink Board (or some other method of level shifting)
 - Flash Cartridge
 
-# General Concept
+# Conceptual Overview
 
 ```
 | PC | <--UART--> | RPi Pico + GBLink Board | <--PIO--> | Gameboy Color | 
@@ -31,10 +31,10 @@ The PIO handle the job of parsing these signals and shifting data out to the gam
 You can find more detailed information on the individual components in the following locations:
 
 ```
-/pico/    | Firmware + PIO programs for an RP2040/RPi Pico (W)
-/rom/     | Gameboy Color ROMs
-/py/      | Python package + scripts for streaming data to the gameboy color 
-/pcb/     | Schematics, PCB designs, and gerber files for the GBLink board.
+/pico/ | Firmware + PIO programs for an RP2040/RPi Pico (W)
+/rom/  | Gameboy Color ROMs
+/py/   | Python package + scripts for streaming data to the gameboy color 
+/pcb/  | Schematics, PCB designs, and gerber files for the GBLink board.
 ```
 
 # Basic Usage
