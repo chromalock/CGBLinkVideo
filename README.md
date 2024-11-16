@@ -37,14 +37,6 @@ You can find more detailed information on the individual components in the follo
 /pcb/  | Schematics, PCB designs, and gerber files for the GBLink board.
 ```
 
-# Basic Usage
-
-## Images
-
-## Audio
-
-## Video
-
-## Streaming (via ffmpeg)
+# Usage
 
 # Explanation Video
