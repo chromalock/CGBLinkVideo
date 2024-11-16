@@ -3367,6 +3367,30 @@
 		(net 2)
 		(uuid "2d5d64b5-8f55-4b9b-98ee-0fcbec685fe1")
 	)
+	(segment
+		(start 146.5 92.9)
+		(end 145.5 91.9)
+		(width 0.25)
+		(layer "F.Cu")
+		(net 2)
+		(uuid "364418cb-9476-4118-a295-53ba49cf482a")
+	)
+	(segment
+		(start 145.5 91.9)
+		(end 145.5 91.5)
+		(width 0.25)
+		(layer "F.Cu")
+		(net 2)
+		(uuid "5445c335-26db-436f-955f-8fc445ebc87b")
+	)
+	(segment
+		(start 146.5 94)
+		(end 146.5 92.9)
+		(width 0.25)
+		(layer "F.Cu")
+		(net 2)
+		(uuid "8a6f4f71-51ed-4716-b7cc-27956c817dbb")
+	)
 	(via
 		(at 137.8 81.4)
 		(size 0.8)
@@ -4043,7 +4067,7 @@
 		)
 		(polygon
 			(pts
-				(xy 137 79) (xy 152 79) (xy 152 92) (xy 137 92)
+				(xy 137 79.5) (xy 152 79.5) (xy 152 92) (xy 137 92)
 			)
 		)
 		(filled_polygon
@@ -4541,7 +4565,7 @@
 		)
 		(polygon
 			(pts
-				(xy 137 79) (xy 152 79) (xy 152 92) (xy 137 92)
+				(xy 137 79.5) (xy 152 79.5) (xy 152 92) (xy 137 92)
 			)
 		)
 		(filled_polygon

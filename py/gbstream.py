@@ -1,5 +1,4 @@
 import serial
-import os
 import time
 
 import encode.audio as audio
@@ -7,14 +6,12 @@ import encode.video as video
 import encode.tile_encode as tile
 import argparse
 
-
 parser = argparse.ArgumentParser("gbstream.py")
 parser.add_argument("-p", "--port", required=True)
 parser.add_argument("-b", "--baud", default=921600)
 parser.add_argument("-i", "--input", default="-")
 
 args = parser.parse_args()
-
 
 port = serial.Serial(args.port, baudrate=args.baud)
 

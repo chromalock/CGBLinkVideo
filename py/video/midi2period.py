@@ -4,7 +4,7 @@ def note_to_frequency(note):
 
 
 def frequency_to_period(freq):
-    return round(-131072.0/freq + 2048)
+    return int(round(-131072.0/freq + 2048))
 
 
 def note_to_period(midi: int) -> int:
