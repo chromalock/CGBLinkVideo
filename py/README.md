@@ -11,7 +11,7 @@ pip install -r ./requirements.txt
 # Usage
 
 ```bash
-python gbstream.py -p /dev/ttyACM0 -b 921600 -i ./video.mp4   # take input from stdin
+python gbstream.py -p /dev/ttyACM0 -b 921600 -i ./video.mp4   # take input from file
 python gbstream.py -p /dev/ttyACM0 -b 921600 -i -             # take input from stdin
 ```
 
