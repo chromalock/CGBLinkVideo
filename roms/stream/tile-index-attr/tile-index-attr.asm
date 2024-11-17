@@ -118,11 +118,41 @@ REPT 360
 	ld [hli], a
 ENDR
 
+
+ld hl, TILE_ATTR
+REPT 360
+	ld a, $ff
+	TransferByteInternalFast
+	ld [hli], a
+ENDR
+
+
 	; wait for a vblank
 	WaitVBlank
 
+	; swap to bank 0
+	ld a, 0
+	ld [$ff4f], a
+
 	; copy tile map buffer into actual map 
 	ld de, TILE_BUFFER
+DEF LINEADDR = $9800
+REPT 18
+  ld	hl, LINEADDR 	; 2 * 18 = 36
+	DEF LINEADDR = LINEADDR + 32
+	REPT 20
+		ld a, [de]			; 2
+		ld [hli], a			; 2
+		inc de					; 2
+	ENDR							; 6 * 360 = 2160
+ENDR
+
+	; swap to bank 1
+	ld a, 1
+	ld [$ff4f], a
+
+	; copy tile map buffer into actual map 
+	ld de, TILE_ATTR
 DEF LINEADDR = $9800
 REPT 18
   ld	hl, LINEADDR
@@ -133,6 +163,7 @@ REPT 18
 		inc de
 	ENDR
 ENDR
+
 	jp	loop
 
 
@@ -142,3 +173,4 @@ INCBIN "../../shared/tiles.2bpp"
 
 SECTION "RAM", WRAM0[$C000]
 TILE_BUFFER: DS 360
+TILE_ATTRS: DS 360

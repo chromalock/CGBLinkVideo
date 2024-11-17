@@ -1,15 +1,9 @@
-from util import clamp
-import numpy as np
-import cv2
-import copy
-
-
 def bits_to_byte(s: list[int]) -> int:
     return int("".join([str(x) for x in s]), 2)
 
 
 def get_color_index(rgb, ncolors: int):
-    return int(round((sum(rgb)/(ncolors - 1))/255 * (ncolors - 1)))
+    return 3 - int(round((sum(rgb)/(ncolors - 1))/255 * (ncolors - 1)))
 
 
 def get_2bpp_bytes(pixels: list[int] | bytearray | bytes):
@@ -21,14 +15,20 @@ def get_2bpp_bytes(pixels: list[int] | bytearray | bytes):
     return [a, b]
 
 
-def getTile(i, data):
-    x = i % 20
-    y = i // 20
-    out = []
-    for j in range(0, 8):
-        start = x*8 + (y*8+j)*160
-        out.extend(get_2bpp_bytes(data[start:start+8]))
-    return out
+def tile_index_to_xy(tile_idx):
+    x = tile_idx % 20
+    y = tile_idx // 20
+
+    real_x = x * 8
+    real_y = y * 8
+
+    return (real_x, real_y)
+
+
+def get_tile(image, tile_idx):
+    x, y = tile_index_to_xy(tile_idx)
+    for row in range(0, 8):
+        yield from get_2bpp_bytes(image[y + row][x:x+8])
 
 
 def get_tile_indexes(frame):
@@ -43,47 +43,6 @@ def get_tile_indexes(frame):
             tile_index = br + bl * 4 + tr * 16 + tl * 64
             indexes[y][x] = tile_index
     return indexes
-
-
-def tile_to_2bpp(tile_image):
-    grey = cv2.cvtColor(np.uint8(tile_image), cv2.COLOR_RGB2GRAY)//85
-    lo = np.bitwise_and(1, np.copy(grey))
-    hi = np.right_shift(np.bitwise_and(0b10, np.copy(grey)), 1)
-    output = b""
-    for i in range(0, 8):
-        output += bits_to_byte(hi[i]).to_bytes(1, "big") + \
-            bits_to_byte(lo[i]).to_bytes(1, "big")
-
-    return output
-
-
-def tile_to_image(tile_data):
-    result = copy.deepcopy(tile_data)
-    for (yi, y) in enumerate(tile_data):
-        for (xi, x) in enumerate(y):
-            result[yi][xi] = [x/1*255 for _ in range(0, 3)]
-    result = np.array(result)
-    return cv2.resize(result, (8, 8), interpolation=cv2.INTER_NEAREST_EXACT)
-
-
-def extract_tiles(frame, tile_size=8):
-    img = frame/255
-    height = len(img)
-    width = len(img[0])
-    tiles_w = width//tile_size
-    tiles_h = height//tile_size
-
-    if height % tile_size or width % tile_size:
-        raise Exception(
-            f"error: image dimensions are not integer multiples of tile factor: {tile_size =} {width =} {height =}")
-
-    for yi in range(0, tiles_h):
-        for xi in range(0, tiles_w):
-            tile = [[clamp(sum(p)/3, 1) for p in ytile[(xi * tile_size):((xi + 1) * tile_size)]]
-                    for ytile in img[(yi * tile_size):((yi + 1) * tile_size)]]
-            output_tile_img = tile_to_image(tile)
-            bpp2 = tile_to_2bpp(output_tile_img)
-            yield from iter(bpp2)
 
 
 def to_bw(ndarray, threshold):

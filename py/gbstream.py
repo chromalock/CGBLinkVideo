@@ -19,6 +19,9 @@ port.flush()
 
 encoding = args.encode
 
+ZERO_BUFFER = b"\0"*360
+
+
 if args.input == "-":
     print('pipe input')
 else:
@@ -39,12 +42,19 @@ else:
             port.write(encoded)
             port.write(encoded)
             # port.write(b"\xaa" + 358 * b"\x00" + b"\xff")
+        elif encoding == "tile-attr":
+            encoded = tile.encode_frame_simple(frame_array)
+            port.write(encoded)
+            port.write(ZERO_BUFFER)
+            port.write(encoded)
+            port.write(ZERO_BUFFER)
         else:
             raise Exception("unknown encoding " + encoding)
 
         current_time = time.time()
         diff = current_time - last_time
         last_time = current_time
-        print(f"{current_frame}/{frames} | {info} | {1/(diff + 0.00000000000001)}")
+        print(
+            f"{current_frame}/{frames} | {info} | {round(1/(diff + 0.00000000000001), 2)}fps")
 
         current_frame += 1

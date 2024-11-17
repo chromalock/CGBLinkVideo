@@ -1,0 +1,23 @@
+Top left, Top Right, Bottom Left, Bottom Right
+
+abcd = 1234
+
+Original : (a b c d)  1 2 3 4
+  a b
+  c d
+
+Y  mirror: (b a d c)  2 1 3 4
+  b a
+  d c
+
+X  mirror: (c d a b)  3 4 1 2
+  c d
+  a b
+
+XY mirror: (d c b a)  4 3 2 1
+  d c
+  b a
+
+
+Palettes are also mappings (permutations):
+
