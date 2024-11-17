@@ -68,16 +68,16 @@ begin:
 	ld	[$FF42], a
 	ld	[$FF43], a
 
-; load tiles
+	; load tiles
 	ld hl, $8000
 	ld de, TILES
 	ld b, $ff
 copy_loop:
-	REPT 16
+REPT 16
 	ld a, [de]
 	ld [hli], a
 	inc de
-	ENDR
+ENDR
 	dec b
 	jp nz, copy_loop
 
@@ -111,28 +111,44 @@ loop:
 	TransferByteInternalFast
 
 	; load all tile indexes over serial into buffer
-	ld hl, TILE_BUFFER
-REPT 360
-	ld a, $ff
-	TransferByteInternalFast
-	ld [hli], a
+DEF LINEADDR = $C000
+REPT 18
+	ld	hl, LINEADDR
+	DEF LINEADDR = LINEADDR + 32
+	REPT 20
+		ld a, $ff
+		TransferByteInternalFast
+		ld [hli], a
+	ENDR
 ENDR
 
 	; wait for a vblank
 	WaitVBlank
 
-	; copy tile map buffer into actual map 
-	ld de, TILE_BUFFER
-DEF LINEADDR = $9800
-REPT 18
-  ld	hl, LINEADDR
-	DEF LINEADDR = LINEADDR + 32
-	REPT 20
-		ld a, [de]
-		ld [hli], a
-		inc de
-	ENDR
-ENDR
+	; Configure DMA
+	
+	; Source
+	ld a, $C0
+	ld [$ff51], a		; source high = $C0
+	ld a, $00
+	ld [$ff52], a		; source low = $00
+
+	; Destination (0x9800)
+	ld a, $98
+	ld [$ff53], a
+	ld a, $00
+	ld [$ff54], a
+
+	; start general dma, 1024 bytes
+	ld a, %0_011_1111
+	ld [$ff55], a
+
+	; wait for dma to complete
+dma_active_loop:
+	ld a, [$ff55]
+	and $80
+	jr z, dma_active_loop
+
 	jp	loop
 
 
@@ -141,4 +157,5 @@ INCBIN "../../shared/tiles.2bpp"
 
 
 SECTION "RAM", WRAM0[$C000]
-TILE_BUFFER: DS 360
+TILE_BUFFER: DS 1024				; this has to be 1024 bytes because the tilemap 
+														; is 32x32 even though we only see 20x18
