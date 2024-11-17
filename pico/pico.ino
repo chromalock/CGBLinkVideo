@@ -46,7 +46,7 @@ uint offset;
 uint timeout;
 int pio_irq;
 
-size_t front_position = 0;
+volatile size_t front_position = 0;
 uint last_gb_recv;
 
 static inline int gb_get() {
@@ -75,16 +75,13 @@ static void pio_irq_func() {
   uint8_t c = gb_get();
   
   // Reset position at start of frame
-  if (c == 0x00) { 
+  if (c == 0x00) {
     video_data.swap_if_ready();
     front_position = 0;
   }
   
-  gb_put(video_data.get_front()[front_position++]);
-
-  if (front_position >= BUFFER_LEN) {
-    front_position = 0;
-  }
+  gb_put(video_data.get_front()[front_position]);
+  front_position = (front_position + 1) % BUFFER_LEN;
 }
 
 // CORE 0 : PIO + IRQ

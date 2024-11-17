@@ -4,7 +4,7 @@
 .wrap_target
     set y, 0     [31]
     set x, 0     [31]
-    pull noblock
+    pull noblock [31]
     set y, 7
 bitloop:
     ; yes, i know the delays seem superfluous, but it breaks otherwise

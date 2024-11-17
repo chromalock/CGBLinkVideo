@@ -1,7 +1,7 @@
 import math
 import numpy as np
 
-from py.util import permutations
+from util import permutations
 
 
 def get_color_index(rgb, ncolors: int):

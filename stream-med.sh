@@ -1,0 +1,1 @@
+python ./py/gbstream.py -p /dev/ttyACM0 -i ./videos/bad-apple-40x36-stretch.mov -e

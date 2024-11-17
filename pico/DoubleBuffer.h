@@ -56,7 +56,8 @@ struct DoubleBuffer {
 
   void write(uint8_t *buf, size_t sz) {
     while (sz--) {
-      this->writec(*(buf++));
+      this->writec(*buf);
+      ++buf;
     }
   }
 

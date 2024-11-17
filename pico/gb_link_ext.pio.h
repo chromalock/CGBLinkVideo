@@ -20,7 +20,7 @@ static const uint16_t gb_link_ext_program_instructions[] = {
             //     .wrap_target
     0xff40, //  0: set    y, 0                   [31]
     0xff20, //  1: set    x, 0                   [31]
-    0x8080, //  2: pull   noblock                    
+    0x9f80, //  2: pull   noblock                [31]
     0xe047, //  3: set    y, 7                       
     0x3f21, //  4: wait   0 pin, 1               [31]
     0xbf42, //  5: nop                           [31]
