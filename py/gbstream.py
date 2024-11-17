@@ -30,5 +30,5 @@ else:
         a = frame.to_ndarray()
         onebit = tile.to_bw(a, 128)
         port.write(onebit[1:] + b"\x00")
-        time.sleep(1.0/30.0)
+        time.sleep(1 * 1.0/30.0)
         current_frame += 1

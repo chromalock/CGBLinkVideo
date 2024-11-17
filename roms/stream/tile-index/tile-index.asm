@@ -27,19 +27,15 @@ INCLUDE "../../shared/util.asm"
 begin:  
 	; no interrupts needed
 	di
-
-	; wait for a vblank
-	WaitForMode %00000001
-	LCDOFF
-
+	
 	; Enter Double-speed mode
 	ld a, 1
 	ld [$ff4d], a
 	stop
 
-	; setup serial (external clock)
-	ld a, %11
-	ld [$ff02], a
+	; wait for a vblank
+	WaitVBlank
+	LCDOFF
 
 	; enable auto-increment
 	ld a, $80
@@ -87,6 +83,7 @@ copy_loop:
 
 	LCDON
 
+	; Wait for start of next frame
 	WaitVBlank
 	WaitVBlankEnd
 
@@ -107,11 +104,15 @@ loop:
 
 	; sync to start of frame
 	ld a, $00
-	TransferByteInternalFast	; idk im paranoid
+	TransferByteInternalFast
+	ld a, $00
+	TransferByteInternalFast
+	ld a, $00
+	TransferByteInternalFast
+
 	; load all tile indexes over serial into buffer
 	ld hl, TILE_BUFFER
-REPT 359
-	ld [hli], a
+REPT 360
 	ld a, $ff
 	TransferByteInternalFast
 	ld [hli], a
@@ -133,6 +134,7 @@ REPT 18
 	ENDR
 ENDR
 	jp	loop
+
 
 TILES:
 INCBIN "../../shared/tiles.2bpp"

@@ -71,7 +71,7 @@ static void pio_irq_func() {
   gb_put(video_data.get_front()[front_position++]);
 
   if (front_position >= BUFFER_LEN) {
-    front_position = 0;
+    front_position = BUFFER_LEN - 1;
   }
 }
 
@@ -83,7 +83,7 @@ void setup() {
   offset = pio_add_program(pio, &gb_link_ext_program);
   sm = pio_claim_unused_sm(pio, true);
   // si, sc, so
-  gb_link_ext_program_init(pio, sm, offset, 2, 3, 4);
+  gb_link_ext_program_init(pio, sm, offset, SI, SC, SO);
 
   pio_irq = (pio == pio0) ? PIO0_IRQ_0 : PIO1_IRQ_0;
 
@@ -95,6 +95,7 @@ void setup() {
 }
 
 void loop() {
+  delay(100);
   // if no data has been received in time, restart the pio
   if (millis() - last_gb_recv > GB_RECV_TIMEOUT) {
     pio_sm_restart(pio, sm);

@@ -8,7 +8,6 @@
     set y, 7
 bitloop:
     ; yes, i know the delays seem superfluous, but it breaks otherwise
-    ;
     wait 0 pin 1 [31]  ; wait for low (first cycle doesnt matter)
     nop          [31]
     out pins, 1  [31]  ; shift out output bit
