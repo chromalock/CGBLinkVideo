@@ -3,6 +3,8 @@
 #include <hardware/pio.h>
 #include <hardware/spi.h>
 #include "./TripleBuffer.h"
+#include "./DoubleBuffer.h"
+#include "./SingleBuffer.h"
 #include "./util.h"
 #include "./gb_link_ext.pio.h"
 
@@ -26,7 +28,17 @@ constexpr auto SI = 2;
 constexpr auto SC = 3;
 constexpr auto SO = 4;
 
-TripleBuffer video_data(BUFFER_LEN);
+// Use triple buffering when the latency of the source is important (live streaming)
+// Use double buffering when you want  (playing videos)
+// Use single bfufering when you dont care about screen tearing, and latency of the source is important
+
+// With triple buffering, write()s will not block, they will just start overwriting the previous buffer
+// With double buffering, write()s will block
+// With single buffering, writes() will not block
+
+#define Buffer DoubleBuffer
+
+Buffer video_data(BUFFER_LEN);
 
 PIO pio = pio0;
 uint sm;
@@ -68,7 +80,7 @@ static void pio_irq_func() {
     front_position = 0;
   }
   
-  gb_put(video_data.get_front()[front_position++]);
+  gb_put(video_data.get_front()[++front_position]);
 
   if (front_position >= BUFFER_LEN) {
     front_position = BUFFER_LEN - 1;
@@ -82,7 +94,6 @@ void setup() {
 
   offset = pio_add_program(pio, &gb_link_ext_program);
   sm = pio_claim_unused_sm(pio, true);
-  // si, sc, so
   gb_link_ext_program_init(pio, sm, offset, SI, SC, SO);
 
   pio_irq = (pio == pio0) ? PIO0_IRQ_0 : PIO1_IRQ_0;
@@ -95,7 +106,7 @@ void setup() {
 }
 
 void loop() {
-  delay(100);
+  delay(GB_RECV_TIMEOUT);
   // if no data has been received in time, restart the pio
   if (millis() - last_gb_recv > GB_RECV_TIMEOUT) {
     pio_sm_restart(pio, sm);

@@ -1,26 +1,31 @@
 #pragma once
 
-struct TripleBuffer {
+struct DoubleBuffer {
   uint8_t *_back;
   uint8_t *_front;
-  uint8_t *_ready;
-  bool _dirty;
   size_t _pos = 0;
   size_t _size;
 
-  TripleBuffer(uint size)
-    : _dirty(true),
+  volatile bool _front_full;
+
+
+  DoubleBuffer(uint size)
+    : _front_full(true),
       _size(size) {
     this->_back = (uint8_t *)malloc(size);
     this->_front = (uint8_t *)malloc(size);
-    this->_ready = (uint8_t *)malloc(size);
     this->clear(false);
   }
 
-  ~TripleBuffer() {
+  ~DoubleBuffer() {
     free(this->_back);
     free(this->_front);
-    free(this->_ready);
+  }
+
+  void swap() {
+    auto tmp = this->_front;
+    this->_front = this->_back;
+    this->_back = tmp;
   }
 
   const uint8_t *get_front() const {
@@ -32,12 +37,9 @@ struct TripleBuffer {
   }
 
   void swap_if_ready() {
-    if (!this->_dirty) {
-      auto tmp = this->_front;
-      this->_front = this->_ready;
-      this->_ready = tmp;
-
-      this->_dirty = true;
+    if (this->_front_full) {
+      this->swap();
+      this->_front_full = false;
     }
   }
 
@@ -45,12 +47,10 @@ struct TripleBuffer {
     this->_back[this->_pos++] = c;
     if (this->_pos >= this->_size) {
       this->_pos = 0;
-
-      auto tmp = this->_ready;
-      this->_ready = this->_back;
-      this->_back = tmp;
-
-      this->_dirty = false;
+      this->_front_full = true;
+      while (this->_front_full) {
+        // wait for the front to be unlocked
+      }
     }
   }
 
@@ -62,8 +62,7 @@ struct TripleBuffer {
 
   void clear(bool preserve_front = true) {
     memset(this->_back, 0, this->_size);
-    memset(this->_ready, 0, this->_size);
-    this->_dirty = true;
+    this->_front_full = false;
     this->_pos = 0;
     if (!preserve_front) {
       memset(this->_front, 0, this->_size);

@@ -14,6 +14,7 @@ parser.add_argument("-i", "--input", default="-")
 args = parser.parse_args()
 
 port = serial.Serial(args.port, baudrate=args.baud)
+port.flush()
 
 if args.input == "-":
     print('pipe input')
@@ -29,6 +30,7 @@ else:
         print(f"{current_frame}/{frames} | {info}")
         a = frame.to_ndarray()
         onebit = tile.to_bw(a, 128)
-        port.write(onebit[1:] + b"\x00")
-        time.sleep(1 * 1.0/30.0)
+        # 30fps
+        port.write(onebit)
+        port.write(onebit)
         current_frame += 1
