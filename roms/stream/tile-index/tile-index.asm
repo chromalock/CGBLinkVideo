@@ -105,10 +105,6 @@ loop:
 	; sync to start of frame
 	ld a, $00
 	TransferByteInternalFast
-	ld a, $00
-	TransferByteInternalFast
-	ld a, $00
-	TransferByteInternalFast
 
 	; load all tile indexes over serial into buffer
 	ld hl, TILE_BUFFER
