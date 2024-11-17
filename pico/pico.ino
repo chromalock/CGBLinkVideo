@@ -8,8 +8,8 @@
 #include "./util.h"
 #include "./gb_link_ext.pio.h"
 
-constexpr size_t GB_RECV_TIMEOUT = 100;
-constexpr size_t UART_RECV_TIMEOUT = 100;
+constexpr size_t GB_RECV_TIMEOUT = 2000;
+constexpr size_t UART_RECV_TIMEOUT = 2000;
 
 // whether or not the buffer should retain 
 // the last frame after a timeout
@@ -75,15 +75,15 @@ static void pio_irq_func() {
   uint8_t c = gb_get();
   
   // Reset position at start of frame
-  if (c == 0x00) {
+  if (c == 0x00) { 
     video_data.swap_if_ready();
     front_position = 0;
   }
   
-  gb_put(video_data.get_front()[++front_position]);
+  gb_put(video_data.get_front()[front_position++]);
 
   if (front_position >= BUFFER_LEN) {
-    front_position = BUFFER_LEN - 1;
+    front_position = 0;
   }
 }
 

@@ -106,6 +106,8 @@ loop:
 	ld a, $00
 	TransferByteInternalFast
 
+	ld a, $ff
+	TransferByteInternalFast
 	; load all tile indexes over serial into buffer
 	ld hl, TILE_BUFFER
 REPT 360

@@ -2,8 +2,8 @@
 
 .program gb_link_ext
 .wrap_target
-    set y, 0
-    set x, 0
+    set y, 0     [31]
+    set x, 0     [31]
     pull noblock
     set y, 7
 bitloop:
@@ -15,7 +15,7 @@ bitloop:
     nop          [31]
     in pins, 1   [31]  ; shift in a bit
     jmp y-- bitloop
-    push noblock
+    push noblock [31]
 .wrap
 
 % c-sdk {

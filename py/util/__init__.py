@@ -2,8 +2,6 @@ import cv2
 import numpy as np
 import copy
 
-from py.util import bits_to_byte
-
 
 def chunks(lst: list, n: int):
     """Yield successive n-sized chunks from lst."""
@@ -58,3 +56,7 @@ def tile_to_image(tile_data):
             result[yi][xi] = [x/1*255 for _ in range(0, 3)]
     result = np.array(result)
     return cv2.resize(result, (8, 8), interpolation=cv2.INTER_NEAREST_EXACT)
+
+
+def rotate(l, n):
+    return l[-n:] + l[:-n]
