@@ -139,7 +139,7 @@ ENDR
 	ld a, $00
 	ld [$ff54], a
 
-	; start general dma, 1024 bytes
+	; Start general dma, 1024 bytes
 	ld a, %0_011_1111
 	ld [$ff55], a
 
