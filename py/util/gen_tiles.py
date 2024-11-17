@@ -1,28 +1,9 @@
 import math
 import numpy as np
-
 from util import permutations
 
 
-def get_color_index(rgb, ncolors: int):
-    return int(round((sum(rgb)/(ncolors - 1))/255 * (ncolors - 1)))
-
-
-def get_tile_indexes(frame):
-    # tile_index = bottom_right + bottom_left*4 + top_right*16 + top_left*64
-    indexes = [[0 for _ in range(20)] for _ in range(18)]
-    for y in range(len(frame)//2):
-        for x in range(len(frame[0])//2):
-            tl = get_color_index(frame[y*2][x*2], 4)
-            tr = get_color_index(frame[y*2][x*2+1], 4)
-            bl = get_color_index(frame[y*2+1][x*2], 4)
-            br = get_color_index(frame[y*2+1][x*2+1], 4)
-            tile_index = br + bl * 4 + tr * 16 + tl * 64
-            indexes[y][x] = tile_index
-    return indexes
-
-
-def gentiles(color_index: int, tile_width: int):
+def generate_tiles(color_index: int, tile_width: int):
     ntiles = color_index**(tile_width*tile_width)
 
     tile_w = 16

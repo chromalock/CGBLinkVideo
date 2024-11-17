@@ -1,10 +1,10 @@
 # Converts an image into a tilemap and tiles
 
-import py.video.util as util
-from py.util import clamp, tile_to_2bpp, tile_to_image
+import video.util as util
+from util import clamp, tile_to_2bpp, tile_to_image
 
 
-def extract_tiles(path: str, tile_n: int):
+def extract_tiles_from_video(path: str, tile_n: int):
     tile_bpp = dict()
 
     tile_size = 2

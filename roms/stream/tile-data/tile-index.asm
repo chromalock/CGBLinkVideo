@@ -96,6 +96,7 @@ loop:
 	; so that the PIO can reset and sync to the bitstream
 	ld a, %00100000
 	ld [$ff00], a
+	; youre just supposed to read it a bunch fuck me idk
 	ld a, [$ff00]
 	ld a, [$ff00]
 	ld a, [$ff00]
@@ -110,17 +111,23 @@ loop:
 	ld a, $00
 	TransferByteInternalFast
 
-	; i have no clue why i need this
+	; i have no clue why i need this, i might not need to, who knows
 	ld a, $ff
 	TransferByteInternalFast
 
-	; load all tile indexes over serial into buffer
-; 	ld hl, TILE_BUFFER
-; REPT 360
-; 	ld a, $ff
-; 	TransferByteInternalFast
-; 	ld [hli], a
-; ENDR
+	; load all tile data over serial into buffer
+	; 16 bytes per tile * 16 rows * 16 columns
+	; = 256 reads of 16
+	ld hl, TILE_DATA
+	ld bc, $ff
+read_tile_data:
+REPT 16
+	ld a, $ff
+	TransferByteInternalFast
+	ld [hli], a
+ENDR
+	dec bc
+	jp nz, read_tile_data
 
 	; wait for a vblank
 	WaitVBlank
