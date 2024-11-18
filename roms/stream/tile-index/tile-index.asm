@@ -1,5 +1,3 @@
-; Video Stream for WiFi Game Boy Cartridge
-
 SECTION	"start",ROM0[$0100]
     nop
     jp	begin
@@ -29,9 +27,7 @@ begin:
 	di
 	
 	; Enter Double-speed mode
-	ld a, 1
-	ld [$ff4d], a
-	stop
+	DoubleSpeed
 
 	; wait for a vblank
 	WaitVBlank
@@ -125,29 +121,9 @@ ENDR
 	; wait for a vblank
 	WaitVBlank
 
-	; Configure DMA
-	
-	; Source
-	ld a, $C0
-	ld [$ff51], a		; source high = $C0
-	ld a, $00
-	ld [$ff52], a		; source low = $00
-
-	; Destination (0x9800)
-	ld a, $98
-	ld [$ff53], a
-	ld a, $00
-	ld [$ff54], a
-
-	; Start general dma, 1024 bytes
-	ld a, %0_011_1111
-	ld [$ff55], a
-
-	; wait for dma to complete
-dma_active_loop:
-	ld a, [$ff55]
-	and $80
-	jr z, dma_active_loop
+	; Copy $C000 to $9800
+	DMA $C000, $9800, %0_011_1111
+	WaitDMA
 
 	jp	loop
 

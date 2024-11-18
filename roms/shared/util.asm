@@ -44,6 +44,34 @@ MACRO TransferByteInternalFast
 	ld a, [$ff01]
 ENDM
 
+
+MACRO WaitDMA
+	; wait for dma to complete
+.dma_active_loop\@:
+	ld a, [$ff55]
+	and $80
+	jr z, .dma_active_loop\@
+ENDM
+
+
+MACRO DMA
+	; Source
+	ld a, HIGH(\1)
+	ld [$ff51], a		; source high = $C0
+	ld a, LOW(\1)
+	ld [$ff52], a		; source low = $00
+
+	; Destination
+	ld a, HIGH(\2)
+	ld [$ff53], a
+	ld a, LOW(\2)
+	ld [$ff54], a
+
+	; Start general dma, 1024 bytes
+	ld a, (\3)
+	ld [$ff55], a
+ENDM
+
 MACRO TransferByteInternalSlow
 	; load byte for sending
 	ld [$ff01], a
@@ -73,4 +101,16 @@ ENDM
 MACRO LCDOFF
 ld	a, %00010000	;LCD off, BG Tile Data 0x8000, BG ON
 ld	[$ff40], a
+ENDM
+
+MACRO DoubleSpeed
+	; Enter Double-speed mode
+	ld a, 1
+	ld [$ff4d], a
+	stop
+ENDM
+
+MACRO VRAMBank
+	ld a, LOW(\1)
+	ld [$ff4f], a
 ENDM

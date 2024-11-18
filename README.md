@@ -2,6 +2,10 @@
 
 Playing media on a gameboy color over the link cable, with the help of an [RP2040](https://www.raspberrypi.com/products/rp2040/)
 
+# Inspiration
+
+This project was heavily inspired by [Staacks/wifi-game-boy-cartridge](https://github.com/Staacks/wifi-game-boy-cartridge).
+
 # System Requirements
 - Linux (MacOS may work)
   - Open to PRs adding windows support

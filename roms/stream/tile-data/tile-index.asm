@@ -34,9 +34,7 @@ begin:
 	di
 	
 	; Enter Double-speed mode
-	ld a, 1
-	ld [$ff4d], a
-	stop
+	DoubleSpeed
 
 	; wait for a vblank
 	WaitVBlank
@@ -129,16 +127,18 @@ ENDR
 	dec bc
 	jp nz, read_tile_data
 
-	; wait for a vblank
+	; wait for the start of a VBlank
+	WaitVBlankEnd
 	WaitVBlank
 
-	; copy tile map buffer into actual map 
+	; Transfer 2048 bytes
+	DMA $C000, $8000, %0_111_1111
+	WaitDMA
+
+	; Setup HBlank DMA for the other 2048
+	DMA $C800, $8800, %1_111_1111
+
 	jp	loop
-
-
-TILES:
-INCBIN "../../shared/tiles.2bpp"
-
 
 SECTION "RAM", WRAM0[$C000]
 ; for now, we're just going to do a 16x16 area

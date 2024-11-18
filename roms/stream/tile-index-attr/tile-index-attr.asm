@@ -1,4 +1,5 @@
-; Video Stream for WiFi Game Boy Cartridge
+DEF TILE_INDEX = $C000
+DEF TILE_ATTRS = ($C000 + 1024)
 
 SECTION	"start",ROM0[$0100]
     nop
@@ -29,9 +30,7 @@ begin:
 	di
 	
 	; Enter Double-speed mode
-	ld a, 1
-	ld [$ff4d], a
-	stop
+	DoubleSpeed
 
 	; wait for a vblank
 	WaitVBlank
@@ -68,16 +67,16 @@ begin:
 	ld	[$FF42], a
 	ld	[$FF43], a
 
-; load tiles
+	; load tiles
 	ld hl, $8000
 	ld de, TILES
 	ld b, $ff
 copy_loop:
-	REPT 16
+REPT 16
 	ld a, [de]
 	ld [hli], a
 	inc de
-	ENDR
+ENDR
 	dec b
 	jp nz, copy_loop
 
@@ -111,58 +110,50 @@ loop:
 	TransferByteInternalFast
 
 	; load all tile indexes over serial into buffer
-	ld hl, TILE_BUFFER
-REPT 360
-	ld a, $ff
-	TransferByteInternalFast
-	ld [hli], a
+DEF LINEADDR = TILE_INDEX
+REPT 18
+	ld	hl, LINEADDR
+	DEF LINEADDR = LINEADDR + 32
+	REPT 20
+		ld a, $ff
+		TransferByteInternalFast
+		ld [hli], a
+	ENDR
 ENDR
 
-
-ld hl, TILE_ATTR
-REPT 360
-	ld a, $ff
-	TransferByteInternalFast
-	ld [hli], a
+	; load all tile attributes over serial into buffer
+DEF LINEADDR = TILE_ATTRS
+REPT 18
+	ld	hl, LINEADDR
+	DEF LINEADDR = LINEADDR + 32
+	REPT 20
+		ld a, $ff
+		TransferByteInternalFast
+		ld [hli], a
+	ENDR
 ENDR
-
 
 	; wait for a vblank
 	WaitVBlank
 
-	; swap to bank 0
-	ld a, 0
-	ld [$ff4f], a
+	; We should be able to do 2 dmas here. The theoretical limit of DMA transfer is
+	; 2280 per vblank, and we're only doing 2048 here.
 
-	; copy tile map buffer into actual map 
-	ld de, TILE_BUFFER
-DEF LINEADDR = $9800
-REPT 18
-  ld	hl, LINEADDR 	; 2 * 18 = 36
-	DEF LINEADDR = LINEADDR + 32
-	REPT 20
-		ld a, [de]			; 2
-		ld [hli], a			; 2
-		inc de					; 2
-	ENDR							; 6 * 360 = 2160
-ENDR
+	; bank 0
+	; tile indices
+	VRAMBank 0
 
-	; swap to bank 1
-	ld a, 1
-	ld [$ff4f], a
+	; Copy $C000 to $9800
+	DMA TILE_INDEX, $9800, %0_011_1111
+	WaitDMA
 
-	; copy tile map buffer into actual map 
-	ld de, TILE_ATTR
-DEF LINEADDR = $9800
-REPT 18
-  ld	hl, LINEADDR
-	DEF LINEADDR = LINEADDR + 32
-	REPT 20
-		ld a, [de]
-		ld [hli], a
-		inc de
-	ENDR
-ENDR
+	; bank 1
+	; tile attributes
+	VRAMBank 1
+
+	; Copy $C400 to $9800
+	DMA TILE_ATTRS, $9800, %0_011_1111
+	WaitDMA
 
 	jp	loop
 
@@ -170,7 +161,6 @@ ENDR
 TILES:
 INCBIN "../../shared/tiles.2bpp"
 
-
 SECTION "RAM", WRAM0[$C000]
-TILE_BUFFER: DS 360
-TILE_ATTRS: DS 360
+TILE_INDX_BUFFER: DS 1024
+TILE_ATTR_BUFFER: DS 1024
