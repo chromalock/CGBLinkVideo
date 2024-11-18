@@ -19,11 +19,13 @@ You can find more detailed information on the individual components in the follo
 ```
 
 # System Requirements
+```
 - Linux (MacOS may work)
   - Open to PRs adding windows support
 - Python 3  (`3.10.12` for me)
 - FFMpeg    (`4.4.2-0ubuntu0.22.04.1` for me)
 - RGBASM    (`v0.7.0-37-gc70cecc2` for me)
+```
 
 # Hardware Requirements
 - Gameboy Color + Link Cable
