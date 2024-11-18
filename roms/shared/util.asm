@@ -3,7 +3,7 @@ MACRO WaitForMode
 	.waitMode\@:
 		ldh	a, [c]
 		and	a, %00000011
-		cp  a, \1
+		cp  a, (\1)
     jr	nz, .waitMode\@
 	ENDM
 
@@ -15,6 +15,13 @@ MACRO WaitVBlankEnd
 	WaitForMode %00000011
 ENDM
 
+MACRO SerialWait
+.serial_wait\@:
+	ld a, [$ff02]
+	and $80
+	jr nz, .serial_wait\@
+ENDM
+
 MACRO TransferByteExternal
 	; load byte for sending
 	ld [$ff01], a
@@ -22,10 +29,7 @@ MACRO TransferByteExternal
 	ld a, $80
 	ld [$ff02], a
 	; wait for confirmation
-.serial_wait\@:
-	ld a, [$ff02]
-	and $80
-	jr nz, .serial_wait\@
+	SerialWait
 	ld a, [$ff01]
 ENDM
 
@@ -36,10 +40,7 @@ MACRO TransferByteInternalFast
 	ld a, $83
 	ld [$ff02], a
 	; wait for confirmation
-.serial_wait\@:
-	ld a, [$ff02]
-	and $80
-	jr nz, .serial_wait\@
+	SerialWait
 	ld a, [$ff01]
 ENDM
 
@@ -64,8 +65,8 @@ MACRO DMA
 	ld a, LOW(\2)
 	ld [$ff54], a
 	
-	; Start general DMA, 1024 bytes
-	ld a, (\3)
+	; Start DMA
+	ld a, LOW(\3)
 	ld [$ff55], a
 ENDM
 
