@@ -1,4 +1,4 @@
-# gb-link-video
+# GBCLinkVideo
 
 Playing media on a gameboy color over the link cable, with the help of an [RP2040](https://www.raspberrypi.com/products/rp2040/)
 
