@@ -1,4 +1,4 @@
-# GBCLinkVideo
+# CGBLinkVideo
 
 Playing media on a gameboy color over the link cable, with the help of an [RPi Pico](https://www.raspberrypi.com/products/raspberry-pi-pico/)
 
