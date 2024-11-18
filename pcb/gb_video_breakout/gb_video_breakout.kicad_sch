@@ -1447,10 +1447,16 @@
 		)
 	)
 	(junction
-		(at 214.63 110.49)
+		(at 114.3 68.58)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "57e7a731-4f1c-44af-adbc-4fe3eaa9e90a")
+	)
+	(junction
+		(at 156.21 66.04)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d4a46f34-01ca-4e20-a008-01a5dcbce538")
 	)
 	(no_connect
 		(at 101.6 111.76)
@@ -1458,7 +1464,7 @@
 	)
 	(wire
 		(pts
-			(xy 214.63 110.49) (xy 222.25 110.49)
+			(xy 114.3 68.58) (xy 121.92 68.58)
 		)
 		(stroke
 			(width 0)
@@ -1468,13 +1474,53 @@
 	)
 	(wire
 		(pts
-			(xy 207.01 110.49) (xy 214.63 110.49)
+			(xy 114.3 71.12) (xy 114.3 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1482afdf-e35a-4ea1-a9f5-9fa9c4208ee3")
+	)
+	(wire
+		(pts
+			(xy 156.21 66.04) (xy 151.13 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "41654b43-b4c9-4279-9830-2f5564e39a4f")
+	)
+	(wire
+		(pts
+			(xy 156.21 66.04) (xy 156.21 69.85)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6d215f33-d46f-4efc-af56-19888b2541eb")
+	)
+	(wire
+		(pts
+			(xy 106.68 68.58) (xy 114.3 68.58)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "be987907-17cd-443c-933f-70ad244bdf5a")
+	)
+	(wire
+		(pts
+			(xy 156.21 66.04) (xy 161.29 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d5fe0c6e-2658-41b7-8f8e-5c4375c6c8e5")
 	)
 	(global_label "CLK_3V3"
 		(shape input)
@@ -1742,7 +1788,7 @@
 	)
 	(symbol
 		(lib_id "power:+5V")
-		(at 207.01 87.63 0)
+		(at 106.68 45.72 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1751,7 +1797,7 @@
 		(fields_autoplaced yes)
 		(uuid "00c3dc26-9f2e-4456-a895-dce62a24f583")
 		(property "Reference" "#PWR011"
-			(at 207.01 91.44 0)
+			(at 106.68 49.53 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1760,7 +1806,7 @@
 			)
 		)
 		(property "Value" "+5V"
-			(at 207.01 82.55 0)
+			(at 106.68 40.64 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1768,7 +1814,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 207.01 87.63 0)
+			(at 106.68 45.72 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1777,7 +1823,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 207.01 87.63 0)
+			(at 106.68 45.72 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1786,7 +1832,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 207.01 87.63 0)
+			(at 106.68 45.72 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1875,7 +1921,7 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 222.25 106.68 0)
+		(at 121.92 64.77 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1884,7 +1930,7 @@
 		(fields_autoplaced yes)
 		(uuid "0d595e1e-21d4-477d-ad8b-1b3a48ba70d7")
 		(property "Reference" "R4"
-			(at 224.79 105.4099 0)
+			(at 124.46 63.4999 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1893,7 +1939,7 @@
 			)
 		)
 		(property "Value" "R"
-			(at 224.79 107.9499 0)
+			(at 124.46 66.0399 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1902,7 +1948,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
-			(at 220.472 106.68 90)
+			(at 120.142 64.77 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1911,7 +1957,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 222.25 106.68 0)
+			(at 121.92 64.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1920,7 +1966,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 222.25 106.68 0)
+			(at 121.92 64.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2053,7 +2099,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 151.13 64.77 0)
+		(at 151.13 62.23 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2062,7 +2108,7 @@
 		(fields_autoplaced yes)
 		(uuid "16fd789d-4705-4fbd-979b-152553d456f5")
 		(property "Reference" "C1"
-			(at 154.94 63.4999 0)
+			(at 154.94 60.9599 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2071,7 +2117,7 @@
 			)
 		)
 		(property "Value" "C"
-			(at 154.94 66.0399 0)
+			(at 154.94 63.4999 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2080,7 +2126,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
-			(at 152.0952 68.58 0)
+			(at 152.0952 66.04 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2089,7 +2135,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 151.13 64.77 0)
+			(at 151.13 62.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2098,7 +2144,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 151.13 64.77 0)
+			(at 151.13 62.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2190,7 +2236,7 @@
 	)
 	(symbol
 		(lib_id "power:+3V3")
-		(at 222.25 87.63 0)
+		(at 121.92 45.72 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2199,7 +2245,7 @@
 		(fields_autoplaced yes)
 		(uuid "1c6ca675-51fb-499d-ae75-b49959fc7fca")
 		(property "Reference" "#PWR012"
-			(at 222.25 91.44 0)
+			(at 121.92 49.53 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2208,7 +2254,7 @@
 			)
 		)
 		(property "Value" "+3V3"
-			(at 222.25 82.55 0)
+			(at 121.92 40.64 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2216,7 +2262,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 222.25 87.63 0)
+			(at 121.92 45.72 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2225,7 +2271,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 222.25 87.63 0)
+			(at 121.92 45.72 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2234,7 +2280,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 222.25 87.63 0)
+			(at 121.92 45.72 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2401,7 +2447,7 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 207.01 106.68 0)
+		(at 106.68 64.77 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2410,7 +2456,7 @@
 		(fields_autoplaced yes)
 		(uuid "45de4d8c-15db-4b6e-8168-a54f37f2ce87")
 		(property "Reference" "R3"
-			(at 209.55 105.4099 0)
+			(at 109.22 63.4999 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2419,7 +2465,7 @@
 			)
 		)
 		(property "Value" "R"
-			(at 209.55 107.9499 0)
+			(at 109.22 66.0399 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2428,7 +2474,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
-			(at 205.232 106.68 90)
+			(at 104.902 64.77 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2437,7 +2483,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 207.01 106.68 0)
+			(at 106.68 64.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2446,7 +2492,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 207.01 106.68 0)
+			(at 106.68 64.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2479,7 +2525,7 @@
 		(dnp no)
 		(uuid "4e7be3cb-a796-4698-a77d-d74751e324d0")
 		(property "Reference" "U1"
-			(at 198.12 100.33 0)
+			(at 137.922 78.232 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2579,7 +2625,7 @@
 	)
 	(symbol
 		(lib_id "power:+3V3")
-		(at 161.29 60.96 0)
+		(at 161.29 58.42 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2588,7 +2634,7 @@
 		(fields_autoplaced yes)
 		(uuid "4e99b347-9eb0-4147-8fa5-84f5e6a032a9")
 		(property "Reference" "#PWR015"
-			(at 161.29 64.77 0)
+			(at 161.29 62.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2597,7 +2643,7 @@
 			)
 		)
 		(property "Value" "+3V3"
-			(at 161.29 55.88 0)
+			(at 161.29 53.34 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2605,7 +2651,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 161.29 60.96 0)
+			(at 161.29 58.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2614,7 +2660,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 161.29 60.96 0)
+			(at 161.29 58.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2623,7 +2669,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 161.29 60.96 0)
+			(at 161.29 58.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2814,72 +2860,6 @@
 			(project "gbvideo_breakout"
 				(path "/e9cec9b6-723f-44da-95e9-c694538d6441"
 					(reference "U2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 161.29 68.58 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "823ab586-d103-4bf0-bfa0-fcfbb45adf50")
-		(property "Reference" "#PWR017"
-			(at 161.29 74.93 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 161.29 73.66 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 161.29 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 161.29 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 161.29 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "b5cc06b5-f715-48ff-876f-234c3f71f231")
-		)
-		(instances
-			(project "gb_video_breakout"
-				(path "/e9cec9b6-723f-44da-95e9-c694538d6441"
-					(reference "#PWR017")
 					(unit 1)
 				)
 			)
@@ -3099,7 +3079,7 @@
 	)
 	(symbol
 		(lib_id "LEDC2012X50N:HSMG-C177")
-		(at 222.25 102.87 90)
+		(at 121.92 60.96 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3108,7 +3088,7 @@
 		(fields_autoplaced yes)
 		(uuid "9b7e959e-3f99-48e3-a667-095304f66543")
 		(property "Reference" "D2"
-			(at 226.06 93.9799 90)
+			(at 125.73 52.0699 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3117,7 +3097,7 @@
 			)
 		)
 		(property "Value" "LED"
-			(at 226.06 96.5199 90)
+			(at 125.73 54.6099 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3126,7 +3106,7 @@
 			)
 		)
 		(property "Footprint" "LED_SMD:LED_0805_2012Metric"
-			(at 315.9 90.17 0)
+			(at 215.57 48.26 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3136,7 +3116,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.mouser.in/datasheet/2/678/AV02_0551EN_DS_HSMx_Cxxx_25Mar2022-1827675.pdf"
-			(at 415.9 90.17 0)
+			(at 315.57 48.26 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3146,7 +3126,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 222.25 102.87 0)
+			(at 121.92 60.96 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3155,7 +3135,7 @@
 			)
 		)
 		(property "Height" "0.5"
-			(at 615.9 90.17 0)
+			(at 515.57 48.26 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3165,7 +3145,7 @@
 			)
 		)
 		(property "Mouser Part Number" "630-HSMS-C177"
-			(at 715.9 90.17 0)
+			(at 615.57 48.26 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3175,7 +3155,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Broadcom-Avago/HSM-C177?qs=YDL0qNrpDT54K8kRkzcocA%3D%3D"
-			(at 815.9 90.17 0)
+			(at 715.57 48.26 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3185,7 +3165,7 @@
 			)
 		)
 		(property "Manufacturer_Name" ""
-			(at 915.9 90.17 0)
+			(at 815.57 48.26 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3195,7 +3175,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "HSMS-C177"
-			(at 1015.9 90.17 0)
+			(at 915.57 48.26 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3221,7 +3201,7 @@
 	)
 	(symbol
 		(lib_id "LEDC2012X50N:HSMG-C177")
-		(at 207.01 102.87 90)
+		(at 106.68 60.96 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3230,7 +3210,7 @@
 		(fields_autoplaced yes)
 		(uuid "9bb3c8ac-d545-4dec-91b0-1e2583c9666d")
 		(property "Reference" "D1"
-			(at 210.82 93.9799 90)
+			(at 110.49 52.0699 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3239,7 +3219,7 @@
 			)
 		)
 		(property "Value" "LED"
-			(at 210.82 96.5199 90)
+			(at 110.49 54.6099 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3248,7 +3228,7 @@
 			)
 		)
 		(property "Footprint" "LED_SMD:LED_0805_2012Metric"
-			(at 300.66 90.17 0)
+			(at 200.33 48.26 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3258,7 +3238,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.mouser.in/datasheet/2/678/AV02_0551EN_DS_HSMx_Cxxx_25Mar2022-1827675.pdf"
-			(at 400.66 90.17 0)
+			(at 300.33 48.26 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3268,7 +3248,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 207.01 102.87 0)
+			(at 106.68 60.96 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3277,7 +3257,7 @@
 			)
 		)
 		(property "Height" "0.5"
-			(at 600.66 90.17 0)
+			(at 500.33 48.26 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3287,7 +3267,7 @@
 			)
 		)
 		(property "Mouser Part Number" "630-HSMG-C177"
-			(at 700.66 90.17 0)
+			(at 600.33 48.26 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3297,7 +3277,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Broadcom-Avago/HSMG-C177?qs=YDL0qNrpDT54K8kRkzcocA%3D%3D"
-			(at 800.66 90.17 0)
+			(at 700.33 48.26 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3307,7 +3287,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Avago Technologies"
-			(at 900.66 90.17 0)
+			(at 800.33 48.26 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3317,7 +3297,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "HSMG-C177"
-			(at 1000.66 90.17 0)
+			(at 900.33 48.26 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3477,7 +3457,7 @@
 	)
 	(symbol
 		(lib_id "power:+5V")
-		(at 151.13 60.96 0)
+		(at 151.13 58.42 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3486,7 +3466,7 @@
 		(fields_autoplaced yes)
 		(uuid "e2568fb2-e821-445f-937a-4d2089072775")
 		(property "Reference" "#PWR013"
-			(at 151.13 64.77 0)
+			(at 151.13 62.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3495,7 +3475,7 @@
 			)
 		)
 		(property "Value" "+5V"
-			(at 151.13 55.88 0)
+			(at 151.13 53.34 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3503,7 +3483,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 151.13 60.96 0)
+			(at 151.13 58.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3512,7 +3492,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 151.13 60.96 0)
+			(at 151.13 58.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3521,7 +3501,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 151.13 60.96 0)
+			(at 151.13 58.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3610,16 +3590,15 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 214.63 110.49 0)
+		(at 114.3 71.12 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "eca6f526-0a8e-4469-878c-1a00ff937f0d")
 		(property "Reference" "#PWR010"
-			(at 214.63 116.84 0)
+			(at 114.3 77.47 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3628,7 +3607,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 214.63 115.57 0)
+			(at 114.3 74.93 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3636,7 +3615,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 214.63 110.49 0)
+			(at 114.3 71.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3645,7 +3624,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 214.63 110.49 0)
+			(at 114.3 71.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3654,7 +3633,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 214.63 110.49 0)
+			(at 114.3 71.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3676,7 +3655,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 161.29 64.77 0)
+		(at 161.29 62.23 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3685,7 +3664,7 @@
 		(fields_autoplaced yes)
 		(uuid "f203c7ed-987e-46be-9e0b-8d2ec6dd67f0")
 		(property "Reference" "C2"
-			(at 165.1 63.4999 0)
+			(at 165.1 60.9599 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3694,7 +3673,7 @@
 			)
 		)
 		(property "Value" "C"
-			(at 165.1 66.0399 0)
+			(at 165.1 63.4999 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3703,7 +3682,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
-			(at 162.2552 68.58 0)
+			(at 162.2552 66.04 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3712,7 +3691,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 161.29 64.77 0)
+			(at 161.29 62.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3721,7 +3700,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 161.29 64.77 0)
+			(at 161.29 62.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3746,16 +3725,15 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 151.13 68.58 0)
+		(at 156.21 69.85 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "f20f5d5c-bee6-4dc0-8be7-05101248f678")
 		(property "Reference" "#PWR016"
-			(at 151.13 74.93 0)
+			(at 156.21 76.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3764,7 +3742,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 151.13 73.66 0)
+			(at 156.21 73.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3772,7 +3750,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 151.13 68.58 0)
+			(at 156.21 69.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3781,7 +3759,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 151.13 68.58 0)
+			(at 156.21 69.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3790,7 +3768,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 151.13 68.58 0)
+			(at 156.21 69.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
