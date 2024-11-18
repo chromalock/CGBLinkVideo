@@ -119,6 +119,7 @@ REPT 18
 ENDR
 
 	; wait for a vblank
+	WaitVBlankEnd
 	WaitVBlank
 
 	; Copy $C000 to $9800
@@ -127,10 +128,8 @@ ENDR
 
 	jp	loop
 
-
 TILES:
 INCBIN "../../shared/tiles.2bpp"
-
 
 SECTION "RAM", WRAM0[$C000]
 TILE_BUFFER: DS 1024
