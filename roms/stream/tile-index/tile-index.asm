@@ -133,5 +133,4 @@ INCBIN "../../shared/tiles.2bpp"
 
 
 SECTION "RAM", WRAM0[$C000]
-TILE_BUFFER: DS 1024				; this has to be 1024 bytes because the tilemap 
-														; is 32x32 even though we only see 20x18
+TILE_BUFFER: DS 1024

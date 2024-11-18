@@ -43,7 +43,6 @@ MACRO TransferByteInternalFast
 	ld a, [$ff01]
 ENDM
 
-
 MACRO WaitDMA
 	; wait for dma to complete
 .dma_active_loop\@:
@@ -52,21 +51,20 @@ MACRO WaitDMA
 	jr z, .dma_active_loop\@
 ENDM
 
-
 MACRO DMA
 	; Source
 	ld a, HIGH(\1)
-	ld [$ff51], a		; source high = $C0
+	ld [$ff51], a
 	ld a, LOW(\1)
-	ld [$ff52], a		; source low = $00
+	ld [$ff52], a
 
 	; Destination
 	ld a, HIGH(\2)
 	ld [$ff53], a
 	ld a, LOW(\2)
 	ld [$ff54], a
-
-	; Start general dma, 1024 bytes
+	
+	; Start general DMA, 1024 bytes
 	ld a, (\3)
 	ld [$ff55], a
 ENDM
@@ -93,13 +91,13 @@ macro Delay
 ENDM
 
 MACRO LCDON
-ld	a, %10010000	;LCD on, BG Tile Data 0x8000, BG ON
-ld	[$ff40], a
+	ld	a, %10010000	;LCD on, BG Tile Data 0x8000, BG ON
+	ld	[$ff40], a
 ENDM
 
 MACRO LCDOFF
-ld	a, %00010000	;LCD off, BG Tile Data 0x8000, BG ON
-ld	[$ff40], a
+	ld	a, %00010000	;LCD off, BG Tile Data 0x8000, BG ON
+	ld	[$ff40], a
 ENDM
 
 MACRO DoubleSpeed
