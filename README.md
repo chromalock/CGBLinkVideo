@@ -7,6 +7,17 @@ Playing media on a gameboy color over the link cable, with the help of an [RP204
 This project was heavily inspired by [Staacks/wifi-game-boy-cartridge](https://github.com/Staacks/wifi-game-boy-cartridge), and
 borrows utility macros, cartridge headers, and some random python snippets.
 
+# Repo Structure
+
+You can find more detailed information on the individual components in the following locations:
+
+```
+/pico/    |   Firmware + PIO programs for an RP2040/RPi Pico (W)
+/roms/    |   Gameboy Color ROMs
+/scripts/ |   Python package + scripts for streaming data to the gameboy color 
+/pcb/     |   Schematics, PCB designs, and gerber files for the GBLink board.
+```
+
 # System Requirements
 - Linux (MacOS may work)
   - Open to PRs adding windows support
@@ -30,17 +41,6 @@ This happens at roughly 1Mbps.
 
 Meanwhile, the Gameboy color makes requests to the RPi Pico over its serial port, with the voltage levels being shifted by the GBLink board.
 The PIO handle the job of parsing these signals and shifting data out to the gameboy.
-
-# Repo Structure
-
-You can find more detailed information on the individual components in the following locations:
-
-```
-/pico/    |   Firmware + PIO programs for an RP2040/RPi Pico (W)
-/roms/    |   Gameboy Color ROMs
-/scripts/ |   Python package + scripts for streaming data to the gameboy color 
-/pcb/     |   Schematics, PCB designs, and gerber files for the GBLink board.
-```
 
 # Usage
 
