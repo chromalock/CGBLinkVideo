@@ -1,4 +1,3 @@
-
 MACRO WaitForMode
 	ld	c, $41
 	.waitMode\@:
