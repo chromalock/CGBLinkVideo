@@ -1,6 +1,6 @@
 # GBCLinkVideo
 
-Playing media on a gameboy color over the link cable, with the help of an [RP2040](https://www.raspberrypi.com/products/rp2040/)
+Playing media on a gameboy color over the link cable, with the help of an [RPi Pico](https://www.raspberrypi.com/products/raspberry-pi-pico/)
 
 # Inspiration
 
@@ -13,7 +13,7 @@ You can find more detailed information on the individual components in the follo
 
 ```
 /pcb/       |   Schematics, PCB designs, and gerber files for the GBLink board.
-/pico/      |   Firmware + PIO programs for an RP2040/RPi Pico (W)
+/pico/      |   Firmware + PIO programs for an RPi Pico (W)
 /roms/      |   Gameboy Color ROMs
 /scripts/   |   Python package + scripts for streaming data to the gameboy color 
 ```
