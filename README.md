@@ -4,7 +4,8 @@ Playing media on a gameboy color over the link cable, with the help of an [RP204
 
 # Inspiration
 
-This project was heavily inspired by [Staacks/wifi-game-boy-cartridge](https://github.com/Staacks/wifi-game-boy-cartridge).
+This project was heavily inspired by [Staacks/wifi-game-boy-cartridge](https://github.com/Staacks/wifi-game-boy-cartridge), and
+borrows utility macros, cartridge headers, and some random python snippets.
 
 # System Requirements
 - Linux (MacOS may work)
