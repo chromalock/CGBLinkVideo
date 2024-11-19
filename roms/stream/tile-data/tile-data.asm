@@ -15,7 +15,7 @@ DB $00,$08,$11,$1F,$88,$89,$00,$0E,$DC,$CC,$6E,$E6,$DD,$DD,$D9,$99
 DB $BB,$BB,$67,$63,$6E,$0E,$EC,$CC,$DD,$DC,$99,$9F,$BB,$B9,$33,$3E
 
 DB "LINKVIDEO",0,0,0,0,0,0   ; Cart name - 15bytes
-DB $C0                       ; $143 - CGB support (supports both)
+DB $C0                       ; $143 - CGB support
 DB 0,0                       ; $144 - Licensee code
 DB 0                         ; $146 - SGB Support indicator
 DB $02                       ; $147 - Cart type
@@ -71,6 +71,17 @@ begin:
 	ld	[$FF42], a
 	ld	[$FF43], a
 
+	; zero out all tiles
+	ld hl, $8000
+	ld b, $ff
+	ld a, 0
+zero_tile_data:
+REPT 16
+	ld [hli], a
+ENDR
+	dec b
+	jp nz, zero_tile_data
+
 	; set up tilemap with 0-256
 	ld a, 0
 DEF LINEADDR = $9800+(COL_START)+(ROW_START*32)
@@ -117,19 +128,21 @@ loop:
 	; 16 bytes per tile * 16 rows * 16 columns
 	; = 256 reads of 16
 	ld hl, TILE_DATA
-	ld bc, $ff
+	ld b, $ff
 read_tile_data:
 REPT 16
 	ld a, $ff
 	TransferByteInternalFast
 	ld [hli], a
 ENDR
-	dec bc
+	dec b
 	jp nz, read_tile_data
 
 	; wait for the start of a VBlank
 	WaitVBlankEnd
 	WaitVBlank
+
+	VRAMBank 0
 
 	; Transfer 2048 bytes
 	DMA $C000, $8000, %0_111_1111

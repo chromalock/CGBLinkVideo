@@ -1,1 +1,1 @@
-python ./py/gbstream.py -p /dev/ttyACM0 -i ./videos/bad-apple-20x18-stretch.mov -e tile
+python ./scripts/gbstream.py -p /dev/ttyACM0 -i ./videos/bad-apple-20x18-stretch.mov -e tile
