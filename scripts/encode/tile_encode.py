@@ -6,20 +6,13 @@ def get_color_index(rgb, ncolors: int):
     return 3 - int(round((sum(rgb)/(ncolors - 1))/255 * (ncolors - 1)))
 
 
-memoized = dict()
-
-
 def get_2bpp_bytes(pixels):
-    tup = tuple(pixels)
-    if tup in memoized:
-        return memoized[tup]
     a = 0x00
     b = 0x00
     for i in range(0, 8):
         a |= (((pixels[i] & 0x40) << 1) >> i)
         b |= ((pixels[i] & 0x80) >> i)
     result = bytearray([a, b])
-    memoized[tup] = result
     return result
 
 

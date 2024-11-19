@@ -46,7 +46,22 @@ def stdin_buffer(size):
 
 if args.input == "-":
     print('pipe input')
+    last_time = time.time()
+    toskip = 0
     while True:
+        current_time = time.time()
+        diff = current_time - last_time
+
+        if toskip > 1:
+            toskip -= 1
+            continue
+        elif toskip == 1:
+            last_time = time.time()
+            toskip = 0
+        elif time.time() - last_time > 1.0/30.0:
+            toskip = int((time.time() - last_time)/(1.0/40.0))
+            continue
+
         if encoding == "tile-data":
             data = sys.stdin.buffer.read(128*128)
             encoded = bytearray(list(tile.get_buffer_tile_data(data, 256)))
@@ -56,6 +71,9 @@ if args.input == "-":
             img = list(chunks([[px, px, px] for px in data], 40))
             encoded = tile.encode_frame_simple(img)
             port.write(encoded)
+
+        last_time = current_time
+
 else:
     format, extra = video.video_info(args.input)
     width = format.width

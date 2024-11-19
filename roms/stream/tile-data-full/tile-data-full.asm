@@ -1,8 +1,8 @@
-DEF COLS = 16
-DEF ROWS = 16
+DEF COLS = 20
+DEF ROWS = 18
 DEF BYTES = COLS*ROWS*16
-DEF COL_START = 2
-DEF ROW_START = 1
+DEF COL_START = 0
+DEF ROW_START = 0
 
 
 SECTION	"start",ROM0[$0100]
@@ -28,6 +28,19 @@ DB 0                         ; $14d - Complement check
 DW 0                         ; $14e - Checksum
 	 
 INCLUDE "../../shared/util.asm"
+
+MACRO Transfer2048 
+	ld hl, (\1)
+	ld b, 127
+read_tile_data\@:
+	REPT 16
+	ld a, $ff
+	TransferByteInternalFast
+	ld [hli], a
+	ENDR
+	dec b
+	jp nz, read_tile_data\@
+ENDM
 
 begin:  
 	; no interrupts needed
@@ -97,6 +110,22 @@ REPT ROWS
 	ENDR
 ENDR
 
+	; enable lcd interrupt
+	ld a, %0000_0010
+	ld [$ffff], a
+
+	; LYC=LY compare
+	ld a, 143			; we'll have to determine this later
+	ld [$ff45], a
+
+	; STAT=LYC int
+	ld a, %0100_0000
+	ld [$ff41], a
+
+	ei
+
+	VRAMBank 0
+
 	LCDON
 
 	; Wait for start of next frame
@@ -117,7 +146,7 @@ loop:
 	jr z, loop
 
 	; wait for end of a vblank
-	WaitVBlankEnd
+	WaitVBlank
 
 	; sync to start of frame
 	ld a, $00
@@ -127,42 +156,21 @@ loop:
 	ld a, $ff
 	TransferByteInternalFast
 
-	; load all tile data over serial into buffer
-	; 16 bytes per tile * 16 rows * 16 columns
-	; = 256 reads of 16
-	ld hl, TILE_DATA
-	ld b, $ff
-read_tile_data:
-REPT 16
-	ld a, $ff
-	TransferByteInternalFast
-	ld [hli], a
-ENDR
-	dec b
-	jp nz, read_tile_data
-
-	; one left over
-REPT 16
-	ld a, $ff
-	TransferByteInternalFast
-	ld [hli], a
-ENDR
-
-	; wait for the start of a VBlank
+	; This is going to take 4 frames
+	
+	Transfer2048 $C000
 	WaitVBlankEnd
 	WaitVBlank
-
-	VRAMBank 0
-
-	; Transfer 2048 bytes
 	DMA $C000, $8000, %0_111_1111
 	WaitDMA
 
-	; Setup HBlank DMA for the other 2048
-	DMA $C800, $8800, %1_111_1111
+	Transfer2048 $C000
+	WaitVBlankEnd
+	WaitVBlank
+	DMA $C000, $8800, %0_111_1111
+	WaitDMA
 
 	jp	loop
 
 SECTION "RAM", WRAM0[$C000]
-; for now, we're just going to do a 16x16 area
-TILE_DATA: DS 4096
+TILE_DATA: DS 2048

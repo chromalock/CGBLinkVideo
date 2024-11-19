@@ -96,6 +96,16 @@ MACRO LCDON
 	ld	[$ff40], a
 ENDM
 
+MACRO LCDON_BANK0
+	ld	a, %10010001
+	ld	[$ff40], a
+ENDM
+
+MACRO LCDON_BANK1
+	ld	a, %10000001	;LCD on, BG Tile Data 0x8800, BG ON
+	ld	[$ff40], a
+ENDM
+
 MACRO LCDOFF
 	ld	a, %00010000	;LCD off, BG Tile Data 0x8000, BG ON
 	ld	[$ff40], a
