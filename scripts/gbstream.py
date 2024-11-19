@@ -27,7 +27,7 @@ parser.add_argument("-p", "--port", required=True)
 parser.add_argument("-b", "--baud", default=921600)
 parser.add_argument("-i", "--input", default="-")
 parser.add_argument("-e", "--encode",  default="tile",
-                    choices=["tile", "tile-data", "tile-attr"])
+                    choices=["tile", "tile-data", "tile-attr", "tile-data-full"])
 
 args = parser.parse_args()
 
@@ -64,7 +64,13 @@ if args.input == "-":
 
         if encoding == "tile-data":
             data = sys.stdin.buffer.read(128*128)
-            encoded = bytearray(list(tile.get_buffer_tile_data(data, 256)))
+            encoded = bytearray(
+                list(tile.get_buffer_tile_data(data, 256, 16, 16)))
+            port.write(encoded)
+        elif encoding == "tile-data-full":
+            data = sys.stdin.buffer.read(160*144)
+            encoded = bytearray(
+                list(tile.get_buffer_tile_data(data, 360, 20, 18)))
             port.write(encoded)
         elif encoding == "tile":
             data = sys.stdin.buffer.read(40*36)
@@ -98,7 +104,7 @@ else:
             continue
         frame_array = frame.to_ndarray()
         if encoding == "tile-data":
-            encoded = bytearray(list(tile.tile_data(frame_array, 256)))
+            encoded = bytearray(list(tile.tile_data(frame_array, 256, 20, 18)))
             port.write(encoded)
         elif encoding == "tile":
             encoded = tile.encode_frame_simple(frame_array)

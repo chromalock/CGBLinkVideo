@@ -26,12 +26,12 @@ def tile_index_to_xy(tile_idx):
     return (int(real_x), int(real_y))
 
 
-def get_buffer_tile(image, tile_idx):
-    x = tile_idx % 16
-    y = tile_idx // 16
+def get_buffer_tile(image, tile_idx, w, h):
+    x = tile_idx % w
+    y = tile_idx // w
     out = []
     for j in range(0, 8):
-        start = x*8 + (y*8+j)*128
+        start = x*8 + (y*8+j)*(8 * w)
         out.extend(get_2bpp_bytes(image[start:start+8]))
     return out
 
@@ -42,9 +42,9 @@ def get_tile(image, tile_idx):
         yield from get_2bpp_bytes([round(sum(x)/3) for x in image[y + row][x:x+8]])
 
 
-def get_buffer_tile_data(image, n_tiles):
+def get_buffer_tile_data(image, n_tiles, w, h):
     for n in range(0, n_tiles):
-        yield from get_buffer_tile(image, n)
+        yield from get_buffer_tile(image, n, w, h)
 
 
 def tile_data(image, n_tiles):

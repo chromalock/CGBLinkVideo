@@ -15,7 +15,7 @@ constexpr size_t UART_RECV_TIMEOUT = 2000;
 // the last frame after a timeout
 constexpr bool PRESERVE_FRONT = false;
 
-constexpr size_t BUFFER_LEN = 4096;
+constexpr size_t BUFFER_LEN = 5760;
 // Note: make sure its a fraction of the buffer len.
 // Also, on my machine 192 is the max size so it can result in
 // a deadlock if the RX_LEN is above 192. Change this value to be
