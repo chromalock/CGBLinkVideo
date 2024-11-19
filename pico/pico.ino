@@ -15,13 +15,13 @@ constexpr size_t UART_RECV_TIMEOUT = 2000;
 // the last frame after a timeout
 constexpr bool PRESERVE_FRONT = false;
 
-constexpr size_t BUFFER_LEN = 360;
+constexpr size_t BUFFER_LEN = 4096;
 // Note: make sure its a fraction of the buffer len.
 // Also, on my machine 192 is the max size so it can result in
 // a deadlock if the RX_LEN is above 192. Change this value to be
 // a lower fraction if you run into an issue. Ultimately even
 // an RX_LEN of 1 should be fine, if not potentially slower.
-constexpr size_t RX_LEN = 180;
+constexpr size_t RX_LEN = 2;
 
 // Note: The pins have to be in ascending order. You can change SI, but SC = SI+1 and SO = SI+2
 constexpr auto SI = 2;
@@ -36,7 +36,7 @@ constexpr auto SO = 4;
 // With double buffering, write()s will block
 // With single buffering, writes() will not block
 
-#define Buffer DoubleBuffer
+#define Buffer TripleBuffer
 
 Buffer video_data(BUFFER_LEN);
 

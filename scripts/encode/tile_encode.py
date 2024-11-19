@@ -6,29 +6,57 @@ def get_color_index(rgb, ncolors: int):
     return 3 - int(round((sum(rgb)/(ncolors - 1))/255 * (ncolors - 1)))
 
 
-def get_2bpp_bytes(pixels: list[int] | bytearray | bytes):
+memoized = dict()
+
+
+def get_2bpp_bytes(pixels):
+    tup = tuple(pixels)
+    if tup in memoized:
+        return memoized[tup]
     a = 0x00
     b = 0x00
     for i in range(0, 8):
         a |= (((pixels[i] & 0x40) << 1) >> i)
         b |= ((pixels[i] & 0x80) >> i)
-    return [a, b]
+    result = bytearray([a, b])
+    memoized[tup] = result
+    return result
 
 
 def tile_index_to_xy(tile_idx):
-    x = tile_idx % 20
-    y = tile_idx // 20
+    x = tile_idx % 16
+    y = tile_idx // 16
 
     real_x = x * 8
     real_y = y * 8
 
-    return (real_x, real_y)
+    return (int(real_x), int(real_y))
+
+
+def get_buffer_tile(image, tile_idx):
+    x = tile_idx % 16
+    y = tile_idx // 16
+    out = []
+    for j in range(0, 8):
+        start = x*8 + (y*8+j)*128
+        out.extend(get_2bpp_bytes(image[start:start+8]))
+    return out
 
 
 def get_tile(image, tile_idx):
     x, y = tile_index_to_xy(tile_idx)
     for row in range(0, 8):
-        yield from get_2bpp_bytes(image[y + row][x:x+8])
+        yield from get_2bpp_bytes([round(sum(x)/3) for x in image[y + row][x:x+8]])
+
+
+def get_buffer_tile_data(image, n_tiles):
+    for n in range(0, n_tiles):
+        yield from get_buffer_tile(image, n)
+
+
+def tile_data(image, n_tiles):
+    for n in range(0, n_tiles):
+        yield from get_tile(image, n)
 
 
 def get_tile_indexes(frame):
