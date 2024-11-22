@@ -2,43 +2,26 @@
 #include <hardware/clocks.h>
 #include <hardware/pio.h>
 #include <hardware/spi.h>
+#include "./Buffer.h"
 #include "./TripleBuffer.h"
 #include "./DoubleBuffer.h"
 #include "./SingleBuffer.h"
 #include "./util.h"
 #include "./gb_link_ext.pio.h"
 
+#include <SerialTransfer.h>
+
+SerialTransfer transfer;
+
+Buffer *gb_buffer = NULL;
+
 constexpr size_t GB_RECV_TIMEOUT = 2000;
 constexpr size_t UART_RECV_TIMEOUT = 2000;
-
-// whether or not the buffer should retain 
-// the last frame after a timeout
-constexpr bool PRESERVE_FRONT = false;
-
-constexpr size_t BUFFER_LEN = 5760;
-// Note: make sure its a fraction of the buffer len.
-// Also, on my machine 192 is the max size so it can result in
-// a deadlock if the RX_LEN is above 192. Change this value to be
-// a lower fraction if you run into an issue. Ultimately even
-// an RX_LEN of 1 should be fine, if not potentially slower.
-constexpr size_t RX_LEN = 2;
 
 // Note: The pins have to be in ascending order. You can change SI, but SC = SI+1 and SO = SI+2
 constexpr auto SI = 2;
 constexpr auto SC = 3;
 constexpr auto SO = 4;
-
-// Use triple buffering when the latency of the source is important (live streaming)
-// Use double buffering when you want  (playing videos)
-// Use single buffering when you dont care about screen tearing, and latency of the source is important
-
-// With triple buffering, write()s will not block, they will just start overwriting the previous buffer
-// With double buffering, write()s will block
-// With single buffering, writes() will not block
-
-#define Buffer TripleBuffer
-
-Buffer video_data(BUFFER_LEN);
 
 PIO pio = pio0;
 uint sm;
@@ -73,15 +56,19 @@ static inline void gb_put_blocking(uint8_t byte) {
 static void pio_irq_func() {
   last_gb_recv = millis();
   uint8_t c = gb_get();
-  
+
+  if (!gb_buffer) {
+    return;
+  }
+
   // Reset position at start of frame
   if (c == 0x00) {
-    video_data.swap_if_ready();
+    gb_buffer->swap_if_ready();
     front_position = 0;
   }
-  
-  gb_put(video_data.get_front()[front_position]);
-  front_position = (front_position + 1) % BUFFER_LEN;
+
+  gb_put(gb_buffer->get_front()[front_position]);
+  front_position = (front_position + 1) % gb_buffer->size();
 }
 
 // CORE 0 : PIO + IRQ
@@ -115,26 +102,69 @@ void loop() {
 
 // CORE 1 : Serial Input + Output
 
-uint8_t rxBuf[RX_LEN] = { 0 };
-uint last_uart_recv = 0;
+constexpr auto MAX_BUFFER_SIZE = 5760;
+
+enum BufferType {
+  Single = 0,
+  Double = 1,
+  Triple = 2
+};
+
+struct Parameters {
+  bool preserve_front;
+  size_t size;
+  BufferType buffer_type;
+};
+
+Parameters params;
+
+void setParametersCallback() {
+  transfer.rxObj(params);
+  if (gb_buffer) {
+    delete gb_buffer;
+    gb_buffer = NULL;
+  }
+  switch (params.buffer_type) {
+    case BufferType::Single:
+      gb_buffer = new SingleBuffer(params.size);
+      break;
+    case BufferType::Double:
+      gb_buffer = new DoubleBuffer(params.size);
+      break;
+    case BufferType::Triple:
+      gb_buffer = new TripleBuffer(params.size);
+      break;
+  }
+}
+
+void recvDataCallback() {
+  if (gb_buffer) {
+    gb_buffer->write(transfer.packet.rxBuff, transfer.bytesRead);
+  }
+}
+
+void clearCallback() {
+  if (gb_buffer) {
+    gb_buffer->clear(params.preserve_front);
+  }
+}
+
+const functionPtr callbacks[] = { setParametersCallback, recvDataCallback, clearCallback };
 
 void setup1() {
   Serial.begin(921600);
-  last_uart_recv = millis();
-  video_data.clear(false);
+
+  configST config;
+  config.timeout = UART_RECV_TIMEOUT;
+  config.debug = false;
+  config.callbacks = callbacks;
+  config.callbacksLen = sizeof(callbacks) / sizeof(functionPtr);
+
+  transfer.begin(Serial, config);
+
+  gb_buffer->clear(false);
 }
 
 void loop1() {
-  if (millis() - last_uart_recv > UART_RECV_TIMEOUT) {
-    video_data.clear(PRESERVE_FRONT);
-    Serial.flush();
-    while (Serial.read() > -1)
-      ;
-    last_uart_recv = millis();
-  }
-  while (Serial.available() >= RX_LEN) {
-    auto readBytes = Serial.readBytes(rxBuf, RX_LEN);
-    video_data.write(rxBuf, readBytes);
-    last_uart_recv = millis();
-  }
+  transfer.tick();
 }

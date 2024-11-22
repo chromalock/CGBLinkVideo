@@ -2,3 +2,4 @@ opencv-python
 Pillow
 pyserial
 av
+pySerialTransfer

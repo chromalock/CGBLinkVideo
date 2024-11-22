@@ -8,20 +8,6 @@ import sys
 
 from util import chunks
 
-command = ["ffmpeg",
-           '-ss', '0:02:27',
-           '-i', 'videos/wifigb.mov',
-           '-i', 'palette.png',
-           '-filter_complex', '[0:v]crop=1200:1080:360:0,scale=160x144[v0];[v0][1:v]paletteuse[out]',
-           '-map', '[out]',
-           '-f', 'image2pipe',
-           '-pix_fmt', 'gray8',
-           '-s', '160x144',
-           '-r', '20',
-           '-vcodec', 'rawvideo', '-']
-
-print(" ".join(command))
-
 parser = argparse.ArgumentParser("gbstream.py")
 parser.add_argument("-p", "--port", required=True)
 parser.add_argument("-b", "--baud", default=921600)

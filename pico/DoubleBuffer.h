@@ -1,6 +1,8 @@
 #pragma once
 
-struct DoubleBuffer {
+#include "./Buffer.h"
+
+struct DoubleBuffer : public Buffer {
   uint8_t *_back;
   uint8_t *_front;
   size_t _pos = 0;
@@ -22,21 +24,25 @@ struct DoubleBuffer {
     free(this->_front);
   }
 
+  virtual size_t size() const {
+    return this->_size;
+  }
+
   void swap() {
     auto tmp = this->_front;
     this->_front = this->_back;
     this->_back = tmp;
   }
 
-  const uint8_t *get_front() const {
+  virtual const uint8_t *get_front() const {
     return this->_front;
   }
 
-  const uint8_t *get_back() const {
+  virtual const uint8_t *get_back() const {
     return this->_back;
   }
 
-  void swap_if_ready() {
+  virtual void swap_if_ready() {
     if (this->_front_full) {
       this->swap();
       this->_front_full = false;
@@ -54,14 +60,14 @@ struct DoubleBuffer {
     }
   }
 
-  void write(uint8_t *buf, size_t sz) {
+  virtual void write(uint8_t *buf, size_t sz) {
     while (sz--) {
       this->writec(*buf);
       ++buf;
     }
   }
 
-  void clear(bool preserve_front = true) {
+  virtual void clear(bool preserve_front = true) {
     memset(this->_back, 0, this->_size);
     this->_front_full = false;
     this->_pos = 0;
