@@ -1,0 +1,26 @@
+Drill report for gb_video_pico_breakout.kicad_pcb
+Created on 2024-11-21T04:21:55-0800
+
+Copper Layer Stackup:
+    =============================================================
+    L1 :  F.Cu                      front
+    L1 :  B.Cu                      back
+
+
+Drill file 'gb_video_pico_breakout-PTH.drl' contains
+    plated through holes:
+    =============================================================
+    T1  0.400mm  0.0157"  (109 holes)
+    T2  1.000mm  0.0394"  (8 holes)
+    T3  1.020mm  0.0402"  (43 holes)
+
+    Total plated holes count 160
+
+
+Drill file 'gb_video_pico_breakout-NPTH.drl' contains
+    unplated through holes:
+    =============================================================
+    T1  1.500mm  0.0591"  (2 holes)
+    T2  1.800mm  0.0709"  (2 holes)
+
+    Total unplated holes count 4

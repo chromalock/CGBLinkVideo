@@ -30,7 +30,7 @@ constexpr auto SO = 4;
 
 // Use triple buffering when the latency of the source is important (live streaming)
 // Use double buffering when you want  (playing videos)
-// Use single bfufering when you dont care about screen tearing, and latency of the source is important
+// Use single buffering when you dont care about screen tearing, and latency of the source is important
 
 // With triple buffering, write()s will not block, they will just start overwriting the previous buffer
 // With double buffering, write()s will block
