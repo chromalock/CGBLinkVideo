@@ -6,7 +6,7 @@ struct TripleBuffer : public Buffer {
   uint8_t *_back;
   uint8_t *_front;
   uint8_t *_ready;
-  bool _dirty;
+  volatile bool _dirty;
   size_t _pos = 0;
   size_t _size;
 

@@ -6,6 +6,7 @@ import argparse
 import time
 import sys
 
+from gblink import GBLink
 from util import chunks
 
 parser = argparse.ArgumentParser("gbstream.py")
@@ -17,18 +18,25 @@ parser.add_argument("-e", "--encode",  default="tile",
 
 args = parser.parse_args()
 
-port = serial.Serial(args.port, baudrate=args.baud)
-port.flush()
+link = GBLink(args.port, args.baud)
+link.open()
+time.sleep(1)
 
 encoding = args.encode
 
 ZERO_BUFFER = b"\0"*360
 
 
-def stdin_buffer(size):
-    while True:
-        yield sys.stdin.buffer.read(size)
+parameters = {
+    'tile': (False, 360, 2),
+    'tile-attr': (False, 720, 2),
+    'tile-data': (False, 4096, 2),
+    'tile-data-full': (False, 5760, 2),
+}[encoding]
 
+print("setting parameters", parameters)
+link.set_parameters(*parameters)
+time.sleep(1)
 
 if args.input == "-":
     print('pipe input')
@@ -52,17 +60,18 @@ if args.input == "-":
             data = sys.stdin.buffer.read(128*128)
             encoded = bytearray(
                 list(tile.get_buffer_tile_data(data, 256, 16, 16)))
-            port.write(encoded)
+            link.send_frame(encoded)
         elif encoding == "tile-data-full":
             data = sys.stdin.buffer.read(160*144)
             encoded = bytearray(
                 list(tile.get_buffer_tile_data(data, 360, 20, 18)))
-            port.write(encoded)
+            link.send_frame(encoded)
         elif encoding == "tile":
             data = sys.stdin.buffer.read(40*36)
             img = list(chunks([[px, px, px] for px in data], 40))
             encoded = tile.encode_frame_simple(img)
-            port.write(encoded)
+            link.send_frame(encoded)
+            link.send_frame(encoded)
 
         last_time = current_time
 
@@ -90,19 +99,22 @@ else:
             continue
         frame_array = frame.to_ndarray()
         if encoding == "tile-data":
-            encoded = bytearray(list(tile.tile_data(frame_array, 256, 20, 18)))
-            port.write(encoded)
+            encoded = bytearray(list(tile.tile_data(frame_array, 256, 16, 16)))
+            link.send_frame(encoded)
+        elif encoding == "tile-data-full":
+            encoded = bytearray(list(tile.tile_data(frame_array, 360, 20, 18)))
+            link.send_frame(encoded)
         elif encoding == "tile":
             encoded = tile.encode_frame_simple(frame_array)
-            port.write(encoded)
-            port.write(encoded)
+            link.send_frame(encoded)
+            link.send_frame(encoded)
             # port.write(b"\xaa" + 358 * b"\x00" + b"\xff")
         elif encoding == "tile-attr":
             encoded = tile.encode_frame_simple(frame_array)
-            port.write(encoded)
-            port.write(ZERO_BUFFER)
-            port.write(encoded)
-            port.write(ZERO_BUFFER)
+            link.send_frame(encoded)
+            link.send_frame(ZERO_BUFFER)
+            link.send_frame(encoded)
+            link.send_frame(ZERO_BUFFER)
         else:
             raise Exception("unknown encoding " + encoding)
 

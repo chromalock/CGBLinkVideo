@@ -3,9 +3,13 @@
 #include <hardware/pio.h>
 #include <hardware/spi.h>
 #include "./Buffer.h"
+
+// Yes, I am lazy enough to write 3 classes
+// instead of abstracting it, deal with it
 #include "./TripleBuffer.h"
 #include "./DoubleBuffer.h"
 #include "./SingleBuffer.h"
+
 #include "./util.h"
 #include "./gb_link_ext.pio.h"
 
@@ -16,7 +20,6 @@ SerialTransfer transfer;
 Buffer *gb_buffer = NULL;
 
 constexpr size_t GB_RECV_TIMEOUT = 2000;
-constexpr size_t UART_RECV_TIMEOUT = 2000;
 
 // Note: The pins have to be in ascending order. You can change SI, but SC = SI+1 and SO = SI+2
 constexpr auto SI = 2;
@@ -63,6 +66,7 @@ static void pio_irq_func() {
 
   // Reset position at start of frame
   if (c == 0x00) {
+    // swap to next frame if one is available
     gb_buffer->swap_if_ready();
     front_position = 0;
   }
@@ -102,6 +106,15 @@ void loop() {
 
 // CORE 1 : Serial Input + Output
 
+bool error = false;
+
+constexpr auto STATUS_LED = 16;
+
+void status(bool state) {
+  digitalWrite(STATUS_LED, state);
+}
+
+constexpr size_t UART_RECV_TIMEOUT = 100;
 constexpr auto MAX_BUFFER_SIZE = 5760;
 
 enum BufferType {
@@ -110,36 +123,53 @@ enum BufferType {
   Triple = 2
 };
 
-struct Parameters {
-  bool preserve_front;
-  size_t size;
-  BufferType buffer_type;
+struct __attribute__ ((packed))  Parameters {
+  uint8_t preserve_front;
+  uint16_t size;
+  uint8_t buffer_type;
 };
 
 Parameters params;
 
 void setParametersCallback() {
-  transfer.rxObj(params);
+  auto recv = transfer.rxObj(params);
+  if (recv != sizeof(Parameters)) {
+    error = true;
+    return;
+  }
+  if(params.size > MAX_BUFFER_SIZE) {
+    error = true;
+    return;
+  }
   if (gb_buffer) {
     delete gb_buffer;
     gb_buffer = NULL;
   }
-  switch (params.buffer_type) {
-    case BufferType::Single:
-      gb_buffer = new SingleBuffer(params.size);
-      break;
-    case BufferType::Double:
-      gb_buffer = new DoubleBuffer(params.size);
-      break;
-    case BufferType::Triple:
-      gb_buffer = new TripleBuffer(params.size);
-      break;
+  gb_buffer = new TripleBuffer(params.size);
+
+  // switch (params.buffer_type) {
+  //   case BufferType::Single:
+  //     gb_buffer = new SingleBuffer(params.size);
+  //     break;
+  //   case BufferType::Double:
+  //     gb_buffer = new DoubleBuffer(params.size);
+  //     break;
+  //   case BufferType::Triple:
+  //     gb_buffer = new TripleBuffer(params.size);
+  //     break;
+  //   default:
+  //     error = true;
+  //     return;
+  // }
+  if (gb_buffer) {
+    gb_buffer->clear(params.preserve_front);
   }
+  error = false;
 }
 
 void recvDataCallback() {
   if (gb_buffer) {
-    gb_buffer->write(transfer.packet.rxBuff, transfer.bytesRead);
+    gb_buffer->write(transfer.packet.rxBuff, transfer.packet.bytesRead);
   }
 }
 
@@ -154,17 +184,19 @@ const functionPtr callbacks[] = { setParametersCallback, recvDataCallback, clear
 void setup1() {
   Serial.begin(921600);
 
+  pinMode(STATUS_LED, OUTPUT);
+  status(true);
+
   configST config;
-  config.timeout = UART_RECV_TIMEOUT;
+  config.timeout = 2000;
   config.debug = false;
   config.callbacks = callbacks;
   config.callbacksLen = sizeof(callbacks) / sizeof(functionPtr);
 
   transfer.begin(Serial, config);
-
-  gb_buffer->clear(false);
 }
 
 void loop1() {
+  status(error);
   transfer.tick();
 }
