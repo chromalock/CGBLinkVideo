@@ -12,8 +12,8 @@ borrows utility macros, cartridge headers, and some random python snippets.
 You can find more detailed information on the individual components in the following locations:
 
 ```
+/firmware/  |   Firmware + PIO programs for an RPi Pico (W)
 /pcb/       |   Schematics, PCB designs, and gerber files for the GBLink board.
-/pico/      |   Firmware + PIO programs for an RPi Pico (W)
 /roms/      |   Gameboy Color ROMs
 /scripts/   |   Python package + scripts for streaming data to the gameboy color 
 ```

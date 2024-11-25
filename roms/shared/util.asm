@@ -122,3 +122,50 @@ MACRO VRAMBank
 	ld a, LOW(\1)
 	ld [$ff4f], a
 ENDM
+
+
+MACRO Transfer1024 
+	ld hl, (\1)
+	ld b, 64
+read_tile_data\@:
+	REPT 16
+	ld a, $ff
+	TransferByteInternalFast
+	ld [hli], a
+	ENDR
+	dec b
+	jp nz, read_tile_data\@
+ENDM
+
+MACRO Transfer1664
+	ld hl, (\1)
+	ld b, 104
+read_tile_data\@:
+	REPT 16
+	ld a, $ff
+	TransferByteInternalFast
+	ld [hli], a
+	ENDR
+	dec b
+	jp nz, read_tile_data\@
+ENDM
+
+MACRO Transfer4096
+	ld hl, (\1)
+	ld b, $ff
+read_tile_data\@:
+	REPT 16
+	ld a, $ff
+	TransferByteInternalFast
+	ld [hli], a
+	ENDR
+	dec b
+	jp nz, read_tile_data\@
+
+	; one left over
+	REPT 16
+	ld a, $ff
+	TransferByteInternalFast
+	ld [hli], a
+	ENDR
+ENDM

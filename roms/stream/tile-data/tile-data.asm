@@ -4,11 +4,9 @@ DEF BYTES = COLS*ROWS*16
 DEF COL_START = 2
 DEF ROW_START = 1
 
-
 SECTION	"start",ROM0[$0100]
     nop
     jp	begin
-
 
 DB $CE,$ED,$66,$66,$CC,$0D,$00,$0B,$03,$73,$00,$83,$00,$0C,$00,$0D
 DB $00,$08,$11,$1F,$88,$89,$00,$0E,$DC,$CC,$6E,$E6,$DD,$DD,$D9,$99
@@ -130,23 +128,7 @@ loop:
 	; load all tile data over serial into buffer
 	; 16 bytes per tile * 16 rows * 16 columns
 	; = 256 reads of 16
-	ld hl, TILE_DATA
-	ld b, $ff
-read_tile_data:
-REPT 16
-	ld a, $ff
-	TransferByteInternalFast
-	ld [hli], a
-ENDR
-	dec b
-	jp nz, read_tile_data
-
-	; one left over
-REPT 16
-	ld a, $ff
-	TransferByteInternalFast
-	ld [hli], a
-ENDR
+	Transfer4096
 
 	; wait for the start of a VBlank
 	WaitVBlankEnd
@@ -164,5 +146,4 @@ ENDR
 	jp	loop
 
 SECTION "RAM", WRAM0[$C000]
-; for now, we're just going to do a 16x16 area
 TILE_DATA: DS 4096
