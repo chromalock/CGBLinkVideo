@@ -2,7 +2,7 @@ ASM	= rgbasm
 LINK = rgblink
 FIX = rgbfix
 
-BINS	= stream.gbc
+BINS	= tile-data-8x8.gbc
 
 all:	$(BINS)
 

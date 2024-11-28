@@ -3,3 +3,4 @@ Pillow
 pyserial
 av
 pySerialTransfer
+pygame

@@ -7607,6 +7607,7 @@
 		)
 		(embedded_fonts no)
 		(model "/home/kaden/kicad/KiCad-RP-Pico-main/RP-Pico Libraries/Pico.wrl"
+			(hide yes)
 			(offset
 				(xyz 0 0 0)
 			)
@@ -7615,6 +7616,17 @@
 			)
 			(rotate
 				(xyz 0 0 0)
+			)
+		)
+		(model "/home/kaden/kicad/KiCad-RP-Pico-main/RP-Pico Libraries/Pico.step"
+			(offset
+				(xyz -10.5 -25.5 0.5)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 90 -180 180)
 			)
 		)
 	)

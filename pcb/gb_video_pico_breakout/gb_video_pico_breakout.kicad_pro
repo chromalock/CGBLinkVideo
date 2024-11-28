@@ -508,7 +508,7 @@
       "plot": "../V0.5-pico/",
       "pos_files": "",
       "specctra_dsn": "",
-      "step": "",
+      "step": "gb_video_pico_breakout.step",
       "svg": "",
       "vrml": ""
     },

@@ -1,5 +1,5 @@
-DEF COLS = 16
-DEF ROWS = 16
+DEF COLS = 8
+DEF ROWS = 8
 DEF BYTES = COLS*ROWS*16
 DEF COL_START = 2
 DEF ROW_START = 1
@@ -126,9 +126,7 @@ loop:
 	TransferByteInternalFast
 
 	; load all tile data over serial into buffer
-	; 16 bytes per tile * 16 rows * 16 columns
-	; = 256 reads of 16
-	Transfer4096
+	Transfer1024 TILE_DATA
 
 	; wait for the start of a VBlank
 	WaitVBlankEnd
@@ -136,12 +134,8 @@ loop:
 
 	VRAMBank 0
 
-	; Transfer 2048 bytes
-	DMA $C000, $8000, %0_111_1111
-	WaitDMA
-
-	; Setup HBlank DMA for the other 2048
-	DMA $C800, $8800, %1_111_1111
+	; Transfer 1024 bytes
+	DMA $C000, $8000, %0_011_1111
 
 	jp	loop
 

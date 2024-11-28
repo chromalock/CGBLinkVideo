@@ -15,6 +15,7 @@ parser.add_argument("-b", "--baud", default=921600)
 parser.add_argument("-i", "--input", default="-")
 parser.add_argument("-e", "--encode",  default="tile",
                     choices=["tile", "tile-data", "tile-attr", "tile-data-full"])
+parser.add_arugment("-s", "--size")
 
 args = parser.parse_args()
 
@@ -39,7 +40,6 @@ link.set_parameters(*parameters)
 time.sleep(1)
 
 if args.input == "-":
-    print('pipe input')
     last_time = time.time()
     toskip = 0
     while True:

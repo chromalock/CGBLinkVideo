@@ -1,61 +1,12 @@
-INCLUDE "../../shared/util.asm"
-
-DEF COLS = 20
-DEF ROWS = 18
+DEF COLS = 11
+DEF ROWS = 11
 DEF BYTES = COLS*ROWS*16
-DEF COL_START = 0
-DEF ROW_START = 0
-
-SECTION	"Org $00",ROM0[$00]
-RST_00:	
-	jp	$100
-
-	SECTION	"Org $08",ROM0[$08]
-RST_08:	
-	jp	$100
-
-	SECTION	"Org $10",ROM0[$10]
-RST_10:
-	jp	$100
-
-	SECTION	"Org $18",ROM0[$18]
-RST_18:
-	jp	$100
-
-	SECTION	"Org $20",ROM0[$20]
-RST_20:
-	jp	$100
-
-	SECTION	"Org $28",ROM0[$28]
-RST_28:
-	jp	$100
-
-	SECTION	"Org $30",ROM0[$30]
-RST_30:
-	jp	$100
-
-	SECTION	"Org $38",ROM0[$38]
-RST_38:
-	jp	$100
-
-; reset to 8000 index addressing at start of frame
-SECTION "VBLANK IRQ",ROM0[$40]
-	jp vblank_irq
-
-; change to 8800 index addressing in the middle of the frame
-SECTION "LCD IRQ",ROM0[$48]
-	jp lcd_irq
-
-SECTION	"Serial IRQ Vector",ROM0[$58]
-	reti
-
-SECTION	"Joypad IRQ Vector",ROM0[$60]
-	reti
+DEF COL_START = 2
+DEF ROW_START = 1
 
 SECTION	"start",ROM0[$0100]
     nop
     jp	begin
-
 
 DB $CE,$ED,$66,$66,$CC,$0D,$00,$0B,$03,$73,$00,$83,$00,$0C,$00,$0D
 DB $00,$08,$11,$1F,$88,$89,$00,$0E,$DC,$CC,$6E,$E6,$DD,$DD,$D9,$99
@@ -73,18 +24,8 @@ DB $33                       ; $14b - Old licensee code
 DB 0                         ; $14c - Mask ROM version
 DB 0                         ; $14d - Complement check
 DW 0                         ; $14e - Checksum
-
-lcd_irq:
-	push af
-	LCDON_BANK1
-	pop af
-	reti
-
-vblank_irq:
-	push af
-	LCDON_BANK0
-	pop af
-	reti
+	 
+INCLUDE "../../shared/util.asm"
 
 begin:  
 	; no interrupts needed
@@ -133,11 +74,14 @@ begin:
 	ld b, $ff
 	ld a, 0
 zero_tile_data:
-REPT 24
+REPT 16
 	ld [hli], a
 ENDR
 	dec b
 	jp nz, zero_tile_data
+REPT 16
+	ld [hli], a
+ENDR
 
 	; set up tilemap with 0-256
 	ld a, 0
@@ -150,26 +94,6 @@ REPT ROWS
 		inc a
 	ENDR
 ENDR
-
-	; enable lcd interrupt + vblank interrupt
-	ld a, %0000_0011
-	ld [$ffff], a
-
-	; LYC=LY compare, we'll need to figure out the line
-	ld a, 80
-	ld [$ff45], a
-
-	; STAT=LYC int
-	ld a, %0100_0000
-	ld [$ff41], a
-
-	; clear out any residual values
-	xor a, a
-	ld [$ff0f], a
-	
-	ei
-
-	VRAMBank 0
 
 	LCDON
 
@@ -191,7 +115,7 @@ loop:
 	jr z, loop
 
 	; wait for end of a vblank
-	WaitVBlank
+	WaitVBlankEnd
 
 	; sync to start of frame
 	ld a, $00
@@ -201,40 +125,19 @@ loop:
 	ld a, $ff
 	TransferByteInternalFast
 
-	; This is going to take 5 frames
-	
-	Transfer1024 $C000
-	WaitVBlankEnd
-	WaitVBlank
-	DMA $C000, $8000, %0_011_1111
-	WaitDMA
+	; load all tile data over serial into buffer
+	Transfer1936 TILE_DATA
 
-	Transfer1024 $C000
+	; wait for the start of a VBlank
 	WaitVBlankEnd
 	WaitVBlank
-	DMA $C000, $8400, %0_011_1111
-	WaitDMA
 
-	Transfer1024 $C000
-	WaitVBlankEnd
-	WaitVBlank
-	DMA $C000, $8800, %0_011_1111
-	WaitDMA
+	VRAMBank 0
 
-	Transfer1024 $C000
-	WaitVBlankEnd
-	WaitVBlank
-	DMA $C000, $8C00, %0_011_1111
-	WaitDMA
-
-	; Transfer the last 1664 (104 tiles)
-	Transfer1664 $C000
-	WaitVBlankEnd
-	WaitVBlank
-	DMA $C000, $9000, %0_110_0111
-	WaitDMA
+	; Transfer 1936 bytes
+	DMA $C000, $8000, %0_111_1000
 
 	jp	loop
 
 SECTION "RAM", WRAM0[$C000]
-TILE_DATA: DS 2048
+TILE_DATA: DS 4096
