@@ -37,20 +37,3 @@ class GBLink(object):
 
     def close(self):
         self.link.close()
-
-
-if __name__ == "__main__":
-    print('opening link')
-    gblink = GBLink("/dev/ttyACM0", 921600)
-    gblink.open()
-    time.sleep(1)
-
-    try:
-        print('setting parameters')
-        gblink.set_parameters(True, 360, 0)
-        time.sleep(1)
-        while True:
-            gblink.send_frame(bytearray(360 * [0x00]))
-            gblink.send_frame(bytearray(360 * [0xff]))
-    finally:
-        gblink.close()

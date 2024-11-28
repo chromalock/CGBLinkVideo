@@ -1,14 +1,6 @@
 from util import permutations
 
 
-def mirror_x(w, h):
-    pass
-
-
-def mirror_y(w, h):
-    pass
-
-
 def mirrors_of(a, b, c, d):
     yield (a, b, c, d)
     yield (b, a, d, c)

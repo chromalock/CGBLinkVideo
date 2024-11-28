@@ -2,7 +2,7 @@ ASM	= rgbasm
 LINK = rgblink
 FIX = rgbfix
 
-BINS	= tile-data-full.gbc
+BINS	= tile-data-20x18.gbc
 
 all:	$(BINS)
 
