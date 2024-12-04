@@ -106,6 +106,9 @@ void loop() {
 
 // CORE 1 : Serial Input + Output
 
+time_t last_uart_recv = 0;
+
+
 bool error = false;
 
 constexpr auto STATUS_LED = 16;
@@ -123,7 +126,7 @@ enum BufferType {
   Triple = 2
 };
 
-struct __attribute__ ((packed))  Parameters {
+struct __attribute__((packed)) Parameters {
   uint8_t preserve_front;
   uint16_t size;
   uint8_t buffer_type;
@@ -132,12 +135,13 @@ struct __attribute__ ((packed))  Parameters {
 Parameters params;
 
 void setParametersCallback() {
+  last_uart_recv = millis();
   auto recv = transfer.rxObj(params);
   if (recv != sizeof(Parameters)) {
     error = true;
     return;
   }
-  if(params.size > MAX_BUFFER_SIZE) {
+  if (params.size > MAX_BUFFER_SIZE) {
     error = true;
     return;
   }
@@ -168,18 +172,21 @@ void setParametersCallback() {
 }
 
 void recvDataCallback() {
+  last_uart_recv = millis();
   if (gb_buffer) {
     gb_buffer->write(transfer.packet.rxBuff, transfer.packet.bytesRead);
   }
 }
 
 void clearCallback() {
+  last_uart_recv = millis();
   if (gb_buffer) {
     gb_buffer->clear(params.preserve_front);
   }
 }
 
 const functionPtr callbacks[] = { setParametersCallback, recvDataCallback, clearCallback };
+
 
 void setup1() {
   Serial.begin(921600);
@@ -192,6 +199,7 @@ void setup1() {
   config.debug = false;
   config.callbacks = callbacks;
   config.callbacksLen = sizeof(callbacks) / sizeof(functionPtr);
+  last_uart_recv = millis();
 
   transfer.begin(Serial, config);
 }
@@ -199,4 +207,8 @@ void setup1() {
 void loop1() {
   status(error);
   transfer.tick();
+  if (millis() - last_uart_recv > 1000) {
+    transfer.reset();
+    last_uart_recv = millis();
+  }
 }

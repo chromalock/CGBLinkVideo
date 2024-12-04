@@ -49,32 +49,42 @@ print("setting parameters", parameters)
 link.set_parameters(*parameters)
 time.sleep(1)
 
-last_time = time.time()
-toskip = 0
-while True:
-    current_time = time.time()
-    diff = current_time - last_time
+print('set parameters')
 
-    # skip any frames that have been missed since the last
-    if toskip > 1:
-        toskip -= 1
-        continue
-    elif toskip == 1:
-        last_time = time.time()
-        toskip = 0
-    elif time.time() - last_time > target_delta:
-        toskip = int((time.time() - last_time)/target_delta)
-        continue
+try:
+    last_time = time.time()
+    toskip = 0
+    while True:
+        if sys.stdin.closed:
+            link.close()
+            sys.exit(0)
+        current_time = time.time()
+        diff = current_time - last_time
 
-    if encoding == "tile-data":
-        data = sys.stdin.buffer.read(width*height*8*8)
-        encoded = bytearray(
-            list(tile.get_buffer_tile_data(data, width*height, width, height)))
-        link.send_frame(encoded)
-    elif encoding == "tile-index":
-        data = sys.stdin.buffer.read(40*36)
-        img = list(chunks([[px, px, px] for px in data], 40))
-        encoded = tile.encode_frame_simple(img)
-        link.send_frame(encoded)
+        # skip any frames that have been missed since the last
+        if toskip > 1:
+            toskip -= 1
+            continue
+        elif toskip == 1:
+            last_time = time.time()
+            toskip = 0
+        elif time.time() - last_time > target_delta:
+            toskip = int((time.time() - last_time)/target_delta)
+            continue
 
-    last_time = current_time
+        if encoding == "tile-data":
+            data = sys.stdin.buffer.read(width*height*8*8)
+            encoded = bytearray(
+                list(tile.get_buffer_tile_data(data, width*height, width, height)))
+            link.send_frame(encoded)
+        elif encoding == "tile-index":
+            data = sys.stdin.buffer.read(width*height)
+            img = list(chunks([[px, px, px] for px in data], 40))
+            encoded = tile.encode_frame_simple(img)
+            link.send_frame(encoded)
+
+        last_time = current_time
+except:
+    link.close()
+    time.sleep(1)
+    sys.exit(0)

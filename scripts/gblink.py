@@ -20,6 +20,9 @@ class GBLink(object):
 
     def open(self):
         self.link.open()
+        self.link.connection.flush()
+        self.link.connection.reset_input_buffer()
+        self.link.connection.reset_output_buffer()
 
     def clear(self):
         self.link.send(0, 2)
