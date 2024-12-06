@@ -137,6 +137,19 @@ read_tile_data\@:
 	jp nz, read_tile_data\@
 ENDM
 
+MACRO Transfer2048
+	ld hl, (\1)
+	ld b, 128
+read_tile_data\@:
+	REPT 16
+	ld a, $ff
+	TransferByteInternalFast
+	ld [hli], a
+	ENDR
+	dec b
+	jp nz, read_tile_data\@
+ENDM
+
 MACRO Transfer1936 
 	ld hl, (\1)
 	ld b, 121

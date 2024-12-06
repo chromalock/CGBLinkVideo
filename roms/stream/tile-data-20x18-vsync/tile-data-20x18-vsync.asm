@@ -201,34 +201,28 @@ loop:
 	ld a, $ff
 	TransferByteInternalFast
 
-	; To "VSync" things a bit, we have to split the transfer across 3 dmas
-	; 1 VBlank + 1 HBlank + 1 VBlank
-
-	Transfer4096 TILE_DATA
-	Transfer1664 (TILE_DATA+4096)
-
-	; wait for the start of a VBlank
+	; This is going to take 3 frames
+	
+	Transfer2048 $C000
 	WaitVBlankEnd
 	WaitVBlank
-
-	VRAMBank 0
-
-	; Transfer 2048 bytes
 	DMA $C000, $8000, %0_111_1111
 	WaitDMA
 
-	; Setup HBlank DMA for the other 2048
-	DMA $C800, $8800, %1_111_1111
-
+	Transfer2048 $C000
 	WaitVBlankEnd
 	WaitVBlank
-
-	; Transfer the last 1664
-	DMA $D000, $9000, %0_110_0111
+	DMA $C000, $8800, %0_111_1111
 	WaitDMA
 
+	; Transfer the last 1664 (104 tiles)
+	Transfer1664 $C000
+	WaitVBlankEnd
+	WaitVBlank
+	DMA $C000, $9000, %0_110_0111
+	WaitDMA
 
 	jp	loop
 
 SECTION "RAM", WRAM0[$C000]
-TILE_DATA: DS BYTES
+TILE_DATA: DS 2048
