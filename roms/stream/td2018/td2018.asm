@@ -106,13 +106,13 @@ begin:
 	ld [$ff69], a
 	ld [$ff69], a
 
-	; lighter black
+	; dark grey
 	ld a, %11001110
 	ld [$ff69], a
 	ld a, %00111001
 	ld [$ff69], a
 
-	; lighter-lighter black
+	; light grey
 	ld a, %11010110
 	ld [$ff69], a
 	ld a, %01011010

@@ -2,7 +2,7 @@ ASM	= rgbasm
 LINK = rgblink
 FIX = rgbfix
 
-BINS	= tile-data-20x18.gbc
+BINS	= td2018-vsync.gbc
 
 all:	$(BINS)
 

@@ -201,18 +201,33 @@ loop:
 	ld a, $ff
 	TransferByteInternalFast
 
-	; This is going to take 3 frames
+	; This is going to take 5 frames
+
+	TransferPalette $D000 
 	
-	Transfer2048 $C000
+	Transfer1024 $C000
 	WaitVBlankEnd
 	WaitVBlank
-	DMA $C000, $8000, %0_111_1111
+	LoadPalette0 $D000				; in the first frame, we need to load the palette 
+	DMA $C000, $8000, %0_011_1111
 	WaitDMA
 
-	Transfer2048 $C000
+	Transfer1024 $C000
 	WaitVBlankEnd
 	WaitVBlank
-	DMA $C000, $8800, %0_111_1111
+	DMA $C000, $8400, %0_011_1111
+	WaitDMA
+
+	Transfer1024 $C000
+	WaitVBlankEnd
+	WaitVBlank
+	DMA $C000, $8800, %0_011_1111
+	WaitDMA
+
+	Transfer1024 $C000
+	WaitVBlankEnd
+	WaitVBlank
+	DMA $C000, $8C00, %0_011_1111
 	WaitDMA
 
 	; Transfer the last 1664 (104 tiles)

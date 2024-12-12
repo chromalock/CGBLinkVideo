@@ -124,6 +124,28 @@ MACRO VRAMBank
 ENDM
 
 
+MACRO TransferPalette
+	ld hl, (\1)
+REPT 8
+	ld a, $ff
+	TransferByteInternalFast
+	ld [hli], a
+ENDR
+ENDM
+
+MACRO LoadPalette0
+	; enable auto-increment, load palette 0
+	ld a, $80
+	ld [$ff68], a
+	ld hl, (\1)
+REPT 8
+	ld a, [hli]
+	ld [$ff69], a
+ENDR
+
+ENDM
+
+
 MACRO Transfer1024 
 	ld hl, (\1)
 	ld b, 64

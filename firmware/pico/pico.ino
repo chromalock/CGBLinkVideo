@@ -1,7 +1,6 @@
 #include <pico/stdlib.h>
 #include <hardware/clocks.h>
 #include <hardware/pio.h>
-#include <hardware/spi.h>
 #include "./Buffer.h"
 
 // Yes, I am lazy enough to write 3 classes
@@ -118,7 +117,7 @@ void status(bool state) {
 }
 
 constexpr size_t UART_RECV_TIMEOUT = 100;
-constexpr auto MAX_BUFFER_SIZE = 5760;
+constexpr auto MAX_BUFFER_SIZE = 70000;
 
 enum BufferType {
   Single = 0,

@@ -6,6 +6,22 @@ def get_color_index(rgb, ncolors: int):
     return 3 - int(round((sum(rgb)/(ncolors - 1))/255 * (ncolors - 1)))
 
 
+def get_2bpp_bytes_color(pixels, pal):
+    a = 0x00
+    b = 0x00
+    for i in range(0, 8):
+        pi = i * 3
+        pix = (pixels[pi], pixels[pi+1], pixels[pi+2])
+        color = None
+        if pix not in pal:
+            color = 0b00
+        else:
+            color = pal[pix]
+        a |= ((color & 0x1) << 7) >> i
+        b |= ((color & 0x2) << 6) >> i
+    return bytearray([a, b])
+
+
 def get_2bpp_bytes(pixels):
     a = 0x00
     b = 0x00
@@ -36,6 +52,16 @@ def get_buffer_tile(image, tile_idx, w, h):
     return out
 
 
+def get_color_buffer_tile(image, tile_idx, w, h, palette):
+    x = tile_idx % w
+    y = tile_idx // w
+    out = []
+    for j in range(0, 8):
+        start = 3*(x*8+(y*8 + j)*(8*w))
+        out.extend(get_2bpp_bytes_color(image[start:(start+8*3)], palette))
+    return out
+
+
 def get_tile(image, tile_idx, w, h):
     x, y = tile_index_to_xy(tile_idx, w, h)
     for row in range(0, 8):
@@ -45,6 +71,11 @@ def get_tile(image, tile_idx, w, h):
 def get_buffer_tile_data(image, n_tiles, w, h):
     for n in range(0, n_tiles):
         yield from get_buffer_tile(image, n, w, h)
+
+
+def get_color_buffer_tile_data(image, n_tiles, w, h, palette):
+    for n in range(0, n_tiles):
+        yield from get_color_buffer_tile(image, n, w, h, palette)
 
 
 def tile_data(image, n_tiles, w, h):
