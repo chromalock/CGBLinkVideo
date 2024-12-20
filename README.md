@@ -52,3 +52,6 @@ Meanwhile, the Gameboy color makes requests to the RPi Pico over its serial port
 The PIO handle the job of parsing these signals and shifting data out to the gameboy.
 
 # Explanation Video
+
+
+[![I Streamed To A Game Boy](https://img.youtube.com/vi/yPI6gURLLUs/0.jpg)](https://www.youtube.com/watch?v=yPI6gURLLUs)
