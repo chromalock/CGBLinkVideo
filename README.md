@@ -4,6 +4,8 @@ Playing media on a gameboy color over the link cable, with the help of an [RPi P
 
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/purple_img.png)](https://buymeacoffee.com/contactchrh)
 
+# FULL INSTUCTIONS COMING SOON
+
 # Inspiration
 
 This project was heavily inspired by [Staacks/wifi-game-boy-cartridge](https://github.com/Staacks/wifi-game-boy-cartridge), and
@@ -48,7 +50,5 @@ This happens at roughly 1Mbps.
 
 Meanwhile, the Gameboy color makes requests to the RPi Pico over its serial port, with the voltage levels being shifted by the GBLink board.
 The PIO handle the job of parsing these signals and shifting data out to the gameboy.
-
-# Usage
 
 # Explanation Video

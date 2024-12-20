@@ -142,7 +142,6 @@ REPT 8
 	ld a, [hli]
 	ld [$ff69], a
 ENDR
-
 ENDM
 
 
@@ -150,11 +149,11 @@ MACRO Transfer1024
 	ld hl, (\1)
 	ld b, 64
 read_tile_data\@:
-	REPT 16
+REPT 16
 	ld a, $ff
 	TransferByteInternalFast
 	ld [hli], a
-	ENDR
+ENDR
 	dec b
 	jp nz, read_tile_data\@
 ENDM

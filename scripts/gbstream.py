@@ -81,6 +81,7 @@ try:
         elif time.time() - last_time > target_delta:
             toskip = int((time.time() - last_time)/target_delta)
             continue
+
         if encoding == "tile-data":
             read_size = width*height*8*8*(3 if use_color else 1)
             data = sys.stdin.buffer.read(read_size)
