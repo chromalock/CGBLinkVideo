@@ -2,5 +2,5 @@
 
 ffmpeg -hide_banner \
   -i $1 \
-  -filter_complex '[0:v]crop=ih/144*160:ih,scale=160x144,eq=saturation=1.4,split[v0][v1];[v0]palettegen=max_colors=4:reserve_transparent=0[p];[v1][p]paletteuse' \
+  -filter_complex '[0:v]crop=ih/144*160:ih,scale=160x144,eq=saturation=1.4,split[v0][v1];[v0]palettegen=max_colors=4:stats_mode=single:reserve_transparent=0[p];[v1][p]paletteuse' \
   $2

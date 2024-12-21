@@ -37,7 +37,7 @@ begin:
 
 ; turn lcd on and start serial data loop
 	LCDON
-	ld b, $0
+	ld b, $0		; change this to whatever number you want to test with
 loop:
 	; send byte
 	ld a, b
