@@ -14,6 +14,8 @@ They increase signal quality and convert between 3.3V and 5V signals on the TX, 
 
 \**Using 5V from the pico results in dropped bits for reasons I am unqualified to answer. Seems to be related to backfeeding into the gameboy.*
 
+# Circuit Diagram
+
 # Limitations
 
 Due to using a unidirectional level shifter on the clock line, the RPi Pico is unable to act as a controller, relying on the gameboy to initiate transactions.
